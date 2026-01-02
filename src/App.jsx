@@ -6,6 +6,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import TeacherLayout from "./pages/Teacher/TeacherLayout";
 import TeacherDashboard from "./pages/Teacher/TeacherDashboard";
 import AddStudent from "./pages/Teacher/AddStudent";
+import ManageStudents from "./pages/Teacher/ManageStudents";
 import AddSubject from "./pages/Teacher/AddSubject";
 import EvaluateExam from "./pages/Teacher/EvaluateExam";
 import Notification from "./pages/Teacher/Notification";
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/teacher" element={<TeacherLayout />}>
           <Route index element={<TeacherDashboard />} />
           <Route path="addstudent" element={<AddStudent />} />
+          <Route path="managestudents" element={<ManageStudents />} />
           <Route path="addsubject" element={<AddSubject />} />
           <Route path="evaluate" element={<EvaluateExam />} /> {/* fixed */}
           <Route

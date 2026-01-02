@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from "react";
+import { DEPARTMENTDATAS } from "../../constants/constants";
 
 const AddStudent = () => {
   const [teacher, setTeacher] = useState({ id: "", name: "" });
-  const [subjects, setSubjects] = useState([]);
 
   const [message, setMessage] = useState("");
+
+  const [availableYears, setAvailableYears] = useState([]);
 
   const [formData, setFormData] = useState({
     studentName: "",
     studentRoll: "",
-    subjectId: "",
+    department: "",
+    year: "",
     teacherId: "",
   });
 
-  // Load teacher + their subjects from localStorage on mount
+  /* =========================
+     LOAD TEACHER INFO
+     ========================= */
   useEffect(() => {
     const storedTeacher = JSON.parse(localStorage.getItem("teacher"));
-    const storedSubjects = JSON.parse(localStorage.getItem("teacherSubjects"));
 
     if (storedTeacher) {
       setTeacher(storedTeacher);
@@ -25,23 +29,44 @@ const AddStudent = () => {
         teacherId: storedTeacher.id,
       }));
     }
-
-    if (storedSubjects) {
-      setSubjects(storedSubjects);
-    }
   }, []);
 
+  /* =========================
+     HANDLE CHANGE
+     ========================= */
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    // Reset year when department changes
+    if (name === "department") {
+      const dept = DEPARTMENTDATAS.find((d) => d.name === value);
+      setAvailableYears(dept ? Object.keys(dept.years) : []);
+
+      setFormData({
+        ...formData,
+        department: value,
+        year: "",
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
+  /* =========================
+     SUBMIT
+     ========================= */
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.studentName || !formData.studentRoll || !formData.subjectId) {
+    if (
+      !formData.studentName ||
+      !formData.studentRoll ||
+      !formData.department ||
+      !formData.year
+    ) {
       setMessage("❌ Please fill all required fields.");
       return;
     }
@@ -54,18 +79,21 @@ const AddStudent = () => {
     setFormData({
       studentName: "",
       studentRoll: "",
-      subjectId: "",
+      department: "",
+      year: "",
       teacherId: teacher.id,
     });
+
+    setAvailableYears([]);
   };
 
   return (
     <div className="min-h-screen flex justify-center items-start px-4 py-10 bg-gray-100 w-full font-out">
-      <div className="flex flex-col  p-6 rounded-xl  max-w-7xl w-full gap-4">
+      <div className="flex flex-col p-6 rounded-xl max-w-7xl w-full gap-4">
 
         {/* Title */}
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-500 text-center mb-6 font-out">
-          Add Student to Subject
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-500 text-center mb-6">
+          Add Student
         </h2>
 
         {/* Status Message */}
@@ -99,13 +127,13 @@ const AddStudent = () => {
               name="studentName"
               value={formData.studentName}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300  rounded-lg 
-                focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg 
+              focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="Enter student name"
             />
           </div>
 
-          {/* Student Roll No */}
+          {/* Roll Number */}
           <div>
             <label className="block text-gray-500 font-medium mb-1">
               Roll Number <span className="text-red-500">*</span>
@@ -115,35 +143,52 @@ const AddStudent = () => {
               name="studentRoll"
               value={formData.studentRoll}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300  rounded-lg 
-                focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg 
+              focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="Enter roll number"
             />
           </div>
 
-          {/* Subject Dropdown */}
+          {/* Department */}
           <div>
             <label className="block text-gray-500 font-medium mb-1">
-              Select Subject <span className="text-red-500">*</span>
+              Department <span className="text-red-500">*</span>
             </label>
-
             <select
-              name="subjectId"
-              value={formData.subjectId}
+              name="department"
+              value={formData.department}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 text-gray-500  rounded-lg bg-white 
-                focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border border-gray-300 text-gray-500 rounded-lg bg-white
+              focus:ring-2 focus:ring-blue-500 outline-none"
             >
-              <option value="">Choose Subject</option>
-              {subjects.length > 0 ? (
-                subjects.map((sub) => (
-                  <option key={sub.id} value={sub.id}>
-                    {sub.name}
-                  </option>
-                ))
-              ) : (
-                <option disabled>No subjects available</option>
-              )}
+              <option value="">Select Department</option>
+              {DEPARTMENTDATAS.map((dept) => (
+                <option key={dept.name} value={dept.name}>
+                  {dept.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Year */}
+          <div>
+            <label className="block text-gray-500 font-medium mb-1">
+              Year <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="year"
+              value={formData.year}
+              onChange={handleChange}
+              disabled={!formData.department}
+              className="w-full px-4 py-3 border border-gray-300 text-gray-500 rounded-lg bg-white
+              focus:ring-2 focus:ring-blue-500 outline-none"
+            >
+              <option value="">Select Year</option>
+              {availableYears.map((yr) => (
+                <option key={yr} value={yr}>
+                  {yr}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -73,14 +73,14 @@ const AddDepartment = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4">
-      <div className="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow">
+    <div className="min-h-screen py-10 px-4 max-w-7xl w-full">
+      <div className="max-w-5xl w-full mx-auto bg-white p-8 rounded-lg shadow text-gray-700 font-bold font-out">
         <h2 className="text-2xl font-semibold mb-6">
           Manage Departments, Years & Subjects
         </h2>
 
         {/* FORM */}
-        <div className="space-y-6">
+        <div className="space-y-6 text-gray-700">
           {/* Department */}
           <div>
             <label className="block text-sm font-medium mb-1">
@@ -91,7 +91,7 @@ const AddDepartment = () => {
               value={departmentName}
               onChange={(e) => setDepartmentName(e.target.value)}
               placeholder="Computer Science Engineering"
-              className="w-full border px-4 py-2 rounded focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-500 px-4 py-2 rounded focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -103,7 +103,7 @@ const AddDepartment = () => {
             <select
               value={year}
               onChange={(e) => setYear(e.target.value)}
-              className="w-full border px-4 py-2 rounded bg-white focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-500 px-4 py-2 rounded bg-white focus:ring-2 focus:ring-indigo-500"
             >
               <option value="">Select Year</option>
               {YEARS.map((y) => (
@@ -125,7 +125,7 @@ const AddDepartment = () => {
                 value={subjectInput}
                 onChange={(e) => setSubjectInput(e.target.value)}
                 placeholder="Data Structures"
-                className="flex-1 border px-4 py-2 rounded focus:ring-2 focus:ring-indigo-500"
+                className="flex-1 border border-gray-500 px-4 py-2 rounded focus:ring-2 focus:ring-indigo-500"
               />
               <button
                 type="button"
