@@ -1,3 +1,8 @@
+import notes7 from '../assets/notes7.pdf'
+import notes8 from '../assets/notes8.pdf'
+import notes9 from '../assets/notes9.pdf'
+import notes10 from '../assets/notes10.pdf'
+
 export const teacherDashboard_data = {
   totalsubjects: 12,
   totalstudents: 3,
@@ -67,128 +72,7 @@ export const evaluationDashboard = [
 
 
 
-// export const studentsData = [
-//   {
-//     id: 1,
-//     name: "Aarav Nair",
-//     registerNo: "REG2024001",
-//     department: "Computer Science",
-//     semester: 5,
-//     subject: "Data Structures",
-//     totalMarks: 100,
-//     scoredMarks: 78,
-//     status: "Pass",
-//     evaluationStatus: "Evaluated"
-//   },
-//   {
-//     id: 2,
-//     name: "Diya Varma",
-//     registerNo: "REG2024002",
-//     department: "Computer Science",
-//     semester: 5,
-//     subject: "Data Structures",
-//     totalMarks: 100,
-//     scoredMarks: 64,
-//     status: "Pass",
-//     evaluationStatus: "Evaluated"
-//   },
-//   {
-//     id: 3,
-//     name: "Noah Mathew",
-//     registerNo: "REG2024003",
-//     department: "Electrical Engineering",
-//     semester: 3,
-//     subject: "Circuit Theory",
-//     totalMarks: 100,
-//     scoredMarks: 0,
-//     status: "Pending",
-//     evaluationStatus: "Not Evaluated"
-//   },
-//   {
-//     id: 4,
-//     name: "Ananya Joseph",
-//     registerNo: "REG2024004",
-//     department: "Mechanical Engineering",
-//     semester: 7,
-//     subject: "Thermodynamics",
-//     totalMarks: 100,
-//     scoredMarks: 92,
-//     status: "Pass",
-//     evaluationStatus: "Evaluated"
-//   },
-//   {
-//     id: 5,
-//     name: "Rahul Menon",
-//     registerNo: "REG2024005",
-//     department: "Civil Engineering",
-//     semester: 1,
-//     subject: "Engineering Mathematics",
-//     totalMarks: 100,
-//     scoredMarks: 41,
-//     status: "Pass",
-//     evaluationStatus: "Evaluated"
-//   },
-//   {
-//     id: 6,
-//     name: "Sneha Raj",
-//     registerNo: "REG2024006",
-//     department: "Computer Science",
-//     semester: 5,
-//     subject: "Data Structures",
-//     totalMarks: 100,
-//     scoredMarks: 0,
-//     status: "Pending",
-//     evaluationStatus: "Not Evaluated"
-//   },
-//   {
-//     id: 7,
-//     name: "Vishnu S",
-//     registerNo: "REG2024007",
-//     department: "Mechanical Engineering",
-//     semester: 7,
-//     subject: "Thermodynamics",
-//     totalMarks: 100,
-//     scoredMarks: 56,
-//     status: "Pass",
-//     evaluationStatus: "Evaluated"
-//   },
-//   {
-//     id: 8,
-//     name: "Meera Ramesh",
-//     registerNo: "REG2024008",
-//     department: "Electrical Engineering",
-//     semester: 3,
-//     subject: "Circuit Theory",
-//     totalMarks: 100,
-//     scoredMarks: 33,
-//     status: "Fail",
-//     evaluationStatus: "Evaluated"
-//   },
-//   {
-//     id: 9,
-//     name: "Adithya Pillai",
-//     registerNo: "REG2024009",
-//     department: "Civil Engineering",
-//     semester: 1,
-//     subject: "Engineering Mathematics",
-//     totalMarks: 100,
-//     scoredMarks: 0,
-//     status: "Pending",
-//     evaluationStatus: "Not Evaluated"
-//   },
-//   {
-//     id: 10,
-//     name: "Kavya Krishna",
-//     registerNo: "REG2024010",
-//     department: "Computer Science",
-//     semester: 5,
-//     subject: "Data Structures",
-//     totalMarks: 100,
-//     scoredMarks: 88,
-//     status: "Pass",
-//     evaluationStatus: "Evaluated"
-//   }
-// ];
+
 
 
 export const studentsData = {
@@ -362,7 +246,225 @@ export const DEPARTMENTDATAS = [
 ];
 
 
+export const TEACHERSDATA = [
+  {
+    id: "T001",
+    teacherId: "T001",
+    name: "Dr. Rajesh Kumar",
+    email: "rajesh.kumar@cse.edu",
+    password: "teacher123",
+    department: "CSE",
+    createdAt: "2024-01-15T10:30:00Z",
+    status: "active",
+  },
+  {
+    id: "T002",
+    teacherId: "T002",
+    name: "Prof. Meera Sharma",
+    email: "meera.sharma@ece.edu",
+    password: "teacher123",
+    department: "ECE",
+    createdAt: "2024-01-20T14:15:00Z",
+    status: "active",
+  },
+  {
+    id: "T003",
+    teacherId: "T003",
+    name: "Dr. Amit Singh",
+    email: "amit.singh@me.edu",
+    password: "teacher123",
+    department: "ME",
+    createdAt: "2024-02-01T09:45:00Z",
+    status: "active",
+  },
+  {
+    id: "T004",
+    teacherId: "T004",
+    name: "Prof. Priya Patel",
+    email: "priya.patel@eee.edu",
+    password: "teacher123",
+    department: "EEE",
+    createdAt: "2024-02-10T11:20:00Z",
+    status: "active",
+  },
+  {
+    id: "T005",
+    teacherId: "T005",
+    name: "Dr. Vikram Rao",
+    email: "vikram.rao@ce.edu",
+    password: "teacher123",
+    department: "CE",
+    createdAt: "2024-02-15T16:30:00Z",
+    status: "active",
+  },
+  {
+    id: "T006",
+    teacherId: "T006",
+    name: "Prof. Kavya Nair",
+    email: "kavya.nair@it.edu",
+    password: "teacher123",
+    department: "IT",
+    createdAt: "2024-03-01T13:10:00Z",
+    status: "active",
+  },
+  {
+    id: "T007",
+    teacherId: "T007",
+    name: "Dr. Arjun Menon",
+    email: "arjun.menon@aiml.edu",
+    password: "teacher123",
+    department: "AI & ML",
+    createdAt: "2024-03-10T10:45:00Z",
+    status: "blocked",
+  },
+  {
+    id: "T008",
+    teacherId: "T008",
+    name: "Prof. Sneha Gupta",
+    email: "sneha.gupta@aids.edu",
+    password: "teacher123",
+    department: "AI & DS",
+    createdAt: "2024-03-15T15:20:00Z",
+    status: "active",
+  },
+  {
+    id: "T009",
+    teacherId: "T009",
+    name: "Dr. Rohan Jain",
+    email: "rohan.jain@csbs.edu",
+    password: "teacher123",
+    department: "CSBS",
+    createdAt: "2024-03-20T12:00:00Z",
+    status: "active",
+  },
+  {
+    id: "T010",
+    teacherId: "T010",
+    name: "Prof. Anjali Reddy",
+    email: "anjali.reddy@mech.edu",
+    password: "teacher123",
+    department: "MECHATRONICS",
+    createdAt: "2024-03-25T14:30:00Z",
+    status: "blocked",
+  },
+];
+
+
+export const EXAMDATA = [
+  {
+    id: "EXAM001",
+    title: "Data Structures Mid-term Examination 2024",
+    department: "CSE",
+    year: "2nd Year",
+    subject: "Data Structures",
+    questionPaper: "ds_midterm_2024.pdf",
+    answerKey: "ds_midterm_answers_2024.pdf",
+    createdAt: "2024-10-15T10:30:00Z",
+    status: "completed",
+    students: [
+      {
+        studentId: "STD002",
+        studentName: "Meera Nair",
+        rollNo: "CSE205",
+        answerSheet: "meera_nair_answer.pdf",
+        submittedAt: "2024-10-15T14:30:00Z",
+        status: "evaluated"
+      },
+      {
+        studentId: "STD008",
+        studentName: "Rohan Gupta",
+        rollNo: "CSE308",
+        answerSheet: "rohan_gupta_answer.pdf",
+        submittedAt: "2024-10-15T15:45:00Z",
+        status: "pending"
+      }
+    ]
+  },
+  {
+    id: "EXAM002",
+    title: "Digital Signal Processing Final Exam 2024",
+    department: "ECE",
+    year: "3rd Year",
+    subject: "Digital Signal Processing",
+    questionPaper: notes8,
+    answerKey: notes9,
+    createdAt: "2024-11-01T09:15:00Z",
+    status: "active",
+    students: [
+      {
+        studentId: "STD007",
+        studentName: "Sneha Patel",
+        rollNo: "ECE312",
+        answerSheet: "sneha_patel_answer.pdf",
+        submittedAt: "2024-11-01T11:20:00Z",
+        status: "evaluated"
+      },
+      {
+        studentId: "STD009",
+        studentName: "Amit Kumar",
+        rollNo: "ECE207",
+        answerSheet: "amit_kumar_answer.pdf",
+        submittedAt: "2024-11-01T12:10:00Z",
+        status: "evaluated"
+      },
+      {
+        studentId: "STD013",
+        studentName: "Kavya Menon",
+        rollNo: "ECE409",
+        answerSheet: notes10,
+        submittedAt: "2024-11-01T13:30:00Z",
+        status: "pending"
+      }
+    ]
+  },
+  {
+    id: "EXAM003",
+    title: "Thermodynamics Quiz Assessment",
+    department: "ME",
+    year: "2nd Year",
+    subject: "Thermodynamics",
+    questionPaper: "thermo_quiz_2024.pdf",
+    answerKey: "thermo_quiz_answers_2024.pdf",
+    createdAt: "2024-11-10T16:00:00Z",
+    status: "active",
+    students: [
+      {
+        studentId: "STD016",
+        studentName: "Vishal Singh",
+        rollNo: "ME201",
+        answerSheet: "vishal_singh_answer.pdf",
+        submittedAt: "2024-11-10T17:30:00Z",
+        status: "pending"
+      },
+      {
+        studentId: "STD020",
+        studentName: "Mohan Reddy",
+        rollNo: "ME267",
+        answerSheet: "mohan_reddy_answer.pdf",
+        submittedAt: "2024-11-10T18:15:00Z",
+        status: "pending"
+      }
+    ]
+  }
+];
+
+
+// Global variable to store dynamically created exams
+export let DYNAMIC_EXAMDATA = [];
+
+// Function to add new exam
+export const addNewExam = (exam) => {
+  DYNAMIC_EXAMDATA.push(exam);
+};
+
+// Function to get all exams (static + dynamic)
+export const getAllExams = () => {
+  return [...EXAMDATA, ...DYNAMIC_EXAMDATA];
+};
+
+
 export const STUDENTDATA = [
+  // CSE Department - 5 Students
   {
     id: "STD001",
     studentName: "Arjun Kumar",
@@ -381,6 +483,32 @@ export const STUDENTDATA = [
   },
   {
     id: "STD003",
+    studentName: "Rohan Gupta",
+    studentRoll: "CSE308",
+    department: "CSE",
+    year: "3rd Year",
+    teacherId: "T001",
+  },
+  {
+    id: "STD004",
+    studentName: "Priya Sharma",
+    studentRoll: "CSE412",
+    department: "CSE",
+    year: "4th Year",
+    teacherId: "T001",
+  },
+  {
+    id: "STD005",
+    studentName: "Vikram Singh",
+    studentRoll: "CSE156",
+    department: "CSE",
+    year: "1st Year",
+    teacherId: "T001",
+  },
+
+  // ECE Department - 5 Students
+  {
+    id: "STD006",
     studentName: "Rahul Sharma",
     studentRoll: "ECE110",
     department: "ECE",
@@ -388,7 +516,7 @@ export const STUDENTDATA = [
     teacherId: "T002",
   },
   {
-    id: "STD004",
+    id: "STD007",
     studentName: "Sneha Patel",
     studentRoll: "ECE312",
     department: "ECE",
@@ -396,23 +524,33 @@ export const STUDENTDATA = [
     teacherId: "T002",
   },
   {
-    id: "STD005",
-    studentName: "Vishal Singh",
-    studentRoll: "ME201",
-    department: "ME",
+    id: "STD008",
+    studentName: "Amit Kumar",
+    studentRoll: "ECE207",
+    department: "ECE",
     year: "2nd Year",
-    teacherId: "T003",
+    teacherId: "T002",
   },
   {
-    id: "STD006",
-    studentName: "Ananya Das",
-    studentRoll: "ME402",
-    department: "ME",
+    id: "STD009",
+    studentName: "Kavya Menon",
+    studentRoll: "ECE409",
+    department: "ECE",
     year: "4th Year",
-    teacherId: "T003",
+    teacherId: "T002",
   },
   {
-    id: "STD007",
+    id: "STD010",
+    studentName: "Suresh Nair",
+    studentRoll: "ECE163",
+    department: "ECE",
+    year: "1st Year",
+    teacherId: "T002",
+  },
+
+  // EEE Department - 5 Students
+  {
+    id: "STD011",
     studentName: "Karthik R",
     studentRoll: "EEE301",
     department: "EEE",
@@ -420,7 +558,83 @@ export const STUDENTDATA = [
     teacherId: "T004",
   },
   {
-    id: "STD008",
+    id: "STD012",
+    studentName: "Anjali Verma",
+    studentRoll: "EEE102",
+    department: "EEE",
+    year: "1st Year",
+    teacherId: "T004",
+  },
+  {
+    id: "STD013",
+    studentName: "Rajesh Kumar",
+    studentRoll: "EEE214",
+    department: "EEE",
+    year: "2nd Year",
+    teacherId: "T004",
+  },
+  {
+    id: "STD014",
+    studentName: "Meena Iyer",
+    studentRoll: "EEE406",
+    department: "EEE",
+    year: "4th Year",
+    teacherId: "T004",
+  },
+  {
+    id: "STD015",
+    studentName: "Deepak Sharma",
+    studentRoll: "EEE358",
+    department: "EEE",
+    year: "3rd Year",
+    teacherId: "T004",
+  },
+
+  // ME Department - 5 Students
+  {
+    id: "STD016",
+    studentName: "Vishal Singh",
+    studentRoll: "ME201",
+    department: "ME",
+    year: "2nd Year",
+    teacherId: "T003",
+  },
+  {
+    id: "STD017",
+    studentName: "Ananya Das",
+    studentRoll: "ME402",
+    department: "ME",
+    year: "4th Year",
+    teacherId: "T003",
+  },
+  {
+    id: "STD018",
+    studentName: "Ravi Prasad",
+    studentRoll: "ME103",
+    department: "ME",
+    year: "1st Year",
+    teacherId: "T003",
+  },
+  {
+    id: "STD019",
+    studentName: "Latha Krishnan",
+    studentRoll: "ME315",
+    department: "ME",
+    year: "3rd Year",
+    teacherId: "T003",
+  },
+  {
+    id: "STD020",
+    studentName: "Mohan Reddy",
+    studentRoll: "ME267",
+    department: "ME",
+    year: "2nd Year",
+    teacherId: "T003",
+  },
+
+  // CE Department - 5 Students
+  {
+    id: "STD021",
     studentName: "Pooja Verma",
     studentRoll: "CE102",
     department: "CE",
@@ -428,7 +642,41 @@ export const STUDENTDATA = [
     teacherId: "T005",
   },
   {
-    id: "STD009",
+    id: "STD022",
+    studentName: "Arun Kumar",
+    studentRoll: "CE208",
+    department: "CE",
+    year: "2nd Year",
+    teacherId: "T005",
+  },
+  {
+    id: "STD023",
+    studentName: "Sarita Jain",
+    studentRoll: "CE309",
+    department: "CE",
+    year: "3rd Year",
+    teacherId: "T005",
+  },
+  {
+    id: "STD024",
+    studentName: "Venkatesh Iyer",
+    studentRoll: "CE401",
+    department: "CE",
+    year: "4th Year",
+    teacherId: "T005",
+  },
+  {
+    id: "STD025",
+    studentName: "Nandini Rao",
+    studentRoll: "CE174",
+    department: "CE",
+    year: "1st Year",
+    teacherId: "T005",
+  },
+
+  // IT Department - 5 Students
+  {
+    id: "STD026",
     studentName: "Nikhil Menon",
     studentRoll: "IT304",
     department: "IT",
@@ -436,11 +684,204 @@ export const STUDENTDATA = [
     teacherId: "T006",
   },
   {
-    id: "STD010",
+    id: "STD027",
+    studentName: "Kiran Joshi",
+    studentRoll: "IT105",
+    department: "IT",
+    year: "1st Year",
+    teacherId: "T006",
+  },
+  {
+    id: "STD028",
+    studentName: "Swathi Nair",
+    studentRoll: "IT212",
+    department: "IT",
+    year: "2nd Year",
+    teacherId: "T006",
+  },
+  {
+    id: "STD029",
+    studentName: "Harish Kumar",
+    studentRoll: "IT407",
+    department: "IT",
+    year: "4th Year",
+    teacherId: "T006",
+  },
+  {
+    id: "STD030",
+    studentName: "Rekha Singh",
+    studentRoll: "IT368",
+    department: "IT",
+    year: "3rd Year",
+    teacherId: "T006",
+  },
+
+  // AI & DS Department - 5 Students
+  {
+    id: "STD031",
     studentName: "Divya S",
-    studentRoll: "AI401",
+    studentRoll: "AIDS106",
+    department: "AI & DS",
+    year: "1st Year",
+    teacherId: "T008",
+  },
+  {
+    id: "STD032",
+    studentName: "Ramesh Gupta",
+    studentRoll: "AIDS213",
+    department: "AI & DS",
+    year: "2nd Year",
+    teacherId: "T008",
+  },
+  {
+    id: "STD033",
+    studentName: "Priyanka Jain",
+    studentRoll: "AIDS318",
+    department: "AI & DS",
+    year: "3rd Year",
+    teacherId: "T008",
+  },
+  {
+    id: "STD034",
+    studentName: "Sanjay Patel",
+    studentRoll: "AIDS405",
+    department: "AI & DS",
+    year: "4th Year",
+    teacherId: "T008",
+  },
+  {
+    id: "STD035",
+    studentName: "Megha Reddy",
+    studentRoll: "AIDS179",
+    department: "AI & DS",
+    year: "1st Year",
+    teacherId: "T008",
+  },
+
+  // AI & ML Department - 5 Students
+  {
+    id: "STD036",
+    studentName: "Divya S",
+    studentRoll: "AIML107",
+    department: "AI & ML",
+    year: "1st Year",
+    teacherId: "T007",
+  },
+  {
+    id: "STD037",
+    studentName: "Ankit Sharma",
+    studentRoll: "AIML214",
+    department: "AI & ML",
+    year: "2nd Year",
+    teacherId: "T007",
+  },
+  {
+    id: "STD038",
+    studentName: "Poonam Gupta",
+    studentRoll: "AIML319",
+    department: "AI & ML",
+    year: "3rd Year",
+    teacherId: "T007",
+  },
+  {
+    id: "STD039",
+    studentName: "Ravi Kumar",
+    studentRoll: "AIML401",
     department: "AI & ML",
     year: "4th Year",
     teacherId: "T007",
   },
+  {
+    id: "STD040",
+    studentName: "Shweta Singh",
+    studentRoll: "AIML282",
+    department: "AI & ML",
+    year: "2nd Year",
+    teacherId: "T007",
+  },
+
+  // CSBS Department - 5 Students
+  {
+    id: "STD041",
+    studentName: "Amit Patel",
+    studentRoll: "CSBS108",
+    department: "CSBS",
+    year: "1st Year",
+    teacherId: "T009",
+  },
+  {
+    id: "STD042",
+    studentName: "Neha Jain",
+    studentRoll: "CSBS215",
+    department: "CSBS",
+    year: "2nd Year",
+    teacherId: "T009",
+  },
+  {
+    id: "STD043",
+    studentName: "Vivek Kumar",
+    studentRoll: "CSBS320",
+    department: "CSBS",
+    year: "3rd Year",
+    teacherId: "T009",
+  },
+  {
+    id: "STD044",
+    studentName: "Kavita Sharma",
+    studentRoll: "CSBS403",
+    department: "CSBS",
+    year: "4th Year",
+    teacherId: "T009",
+  },
+  {
+    id: "STD045",
+    studentName: "Rahul Verma",
+    studentRoll: "CSBS193",
+    department: "CSBS",
+    year: "1st Year",
+    teacherId: "T009",
+  },
+
+  // MECHATRONICS Department - 5 Students
+  {
+    id: "STD046",
+    studentName: "Suresh Babu",
+    studentRoll: "MECH109",
+    department: "MECHATRONICS",
+    year: "1st Year",
+    teacherId: "T010",
+  },
+  {
+    id: "STD047",
+    studentName: "Latha Subramanian",
+    studentRoll: "MECH216",
+    department: "MECHATRONICS",
+    year: "2nd Year",
+    teacherId: "T010",
+  },
+  {
+    id: "STD048",
+    studentName: "Arun Prakash",
+    studentRoll: "MECH321",
+    department: "MECHATRONICS",
+    year: "3rd Year",
+    teacherId: "T010",
+  },
+  {
+    id: "STD049",
+    studentName: "Priya Narayanan",
+    studentRoll: "MECH404",
+    department: "MECHATRONICS",
+    year: "4th Year",
+    teacherId: "T010",
+  },
+  {
+    id: "STD050",
+    studentName: "Karthik Raja",
+    studentRoll: "MECH287",
+    department: "MECHATRONICS",
+    year: "2nd Year",
+    teacherId: "T010",
+  },
 ];
+

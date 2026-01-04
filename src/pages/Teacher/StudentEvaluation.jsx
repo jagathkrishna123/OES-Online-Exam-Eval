@@ -1,392 +1,425 @@
-// import React, { useEffect, useState } from "react";
-// import { useParams, useNavigate } from "react-router-dom";
-// import { studentsData, evaluationDashboard } from "../constants/constants";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { getAllExams } from "../../constants/constants";
+import { FaFileAlt, FaKey, FaArrowLeft, FaSave, FaEye, FaCheckCircle, FaTimes, FaExpand, FaCompress } from "react-icons/fa";
 
-// const initialQuestions = [
-//   { id: "Q1", label: "Q1 Marks", max: 10 },
-//   { id: "Q2a", label: "Q2a Marks", max: 5 },
-//   { id: "Q2b", label: "Q2b Marks", max: 5 },
-//   { id: "Q3", label: "Q3 Marks", max: 15 },
-//   { id: "Q4", label: "Q4 Marks", max: 20 },
-//   { id: "Q5", label: "Q5 Marks", max: 15 },
-//   { id: "Q6a", label: "Q6a Marks", max: 15 },
-//   { id: "Q6b", label: "Q6b Marks", max: 15 }
-// ];
-
-// export default function StudentEvaluation() {
-//   const { subjectId, studentId } = useParams();
-//   const navigate = useNavigate();
-//   const sid = Number(subjectId);
-//   const stid = Number(studentId);
-
-//   const students = studentsData[sid] || [];
-//   const student = students.find(s => s.id === stid) || { id: stid, name: "Unknown", roll: "N/A", status: "Pending" };
-//   const subject = evaluationDashboard.find(s => s.id === sid) || { subject: "Subject" };
-
-//   const draftKey = `eval_draft_${sid}_${stid}`;
-//   const [marks, setMarks] = useState(() => {
-//     try {
-//       const saved = localStorage.getItem(draftKey);
-//       return saved ? JSON.parse(saved) : Object.fromEntries(initialQuestions.map(q => [q.id, ""]));
-//     } catch {
-//       return Object.fromEntries(initialQuestions.map(q => [q.id, ""]));
-//     }
-//   });
-
-//   const [status, setStatus] = useState(student.status || "Pending");
-//   const [zoomQP, setZoomQP] = useState(1);
-//   const [zoomAS, setZoomAS] = useState(1);
-
-//   useEffect(() => {
-//     const t = setTimeout(() => {
-//       try { localStorage.setItem(draftKey, JSON.stringify(marks)); } catch {}
-//     }, 300);
-//     return () => clearTimeout(t);
-//   }, [marks, draftKey]);
-
-//   const handleChange = (qid, value) => {
-//     if (value === "") {
-//       setMarks(prev => ({ ...prev, [qid]: "" }));
-//       return;
-//     }
-//     const cleaned = value.replace(/[^0-9]/g, "");
-//     setMarks(prev => ({ ...prev, [qid]: cleaned }));
-//   };
-
-//   const totalMarks = Object.entries(marks).reduce((acc, [k, v]) => acc + (Number(v || 0)), 0);
-
-//   const handleSaveDraft = () => {
-//     try {
-//       localStorage.setItem(draftKey, JSON.stringify(marks));
-//       alert("Draft saved locally.");
-//     } catch {
-//       alert("Could not save draft.");
-//     }
-//   };
-
-//   const handleSubmit = () => {
-//     // basic validation and confirm if some empty
-//     for (const q of initialQuestions) {
-//       const v = marks[q.id];
-//       if (v === "" || isNaN(Number(v))) {
-//         if (!confirm(`Some marks are empty or invalid (question ${q.id}). Submit anyway?`)) return;
-//         break;
-//       }
-//       if (Number(v) > q.max) {
-//         if (!confirm(`${q.id} exceeds maximum marks (${q.max}). Submit anyway?`)) return;
-//       }
-//     }
-
-//     try { localStorage.removeItem(draftKey); } catch {}
-//     // In real app: call API to persist and update student's status
-//     setStatus("Completed");
-//     alert("Evaluation submitted. Total: " + totalMarks);
-
-//     // Optionally redirect back to subject list after submit
-//     navigate(`/subject/${sid}`);
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 p-6">
-//       <div className="max-w-7xl mx-auto">
-//         <header className="flex items-center justify-between mb-6">
-//           <div>
-//             <h1 className="text-2xl font-extrabold text-gray-800">Exam Evaluation Portal</h1>
-//             <p className="text-sm text-gray-500">Subject: {subject.subject} — Student evaluation</p>
-//           </div>
-//         </header>
-
-//         {/* viewers */}
-//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-//           <div className="bg-white rounded-2xl shadow-sm p-4 border">
-//             <div className="flex items-center justify-between mb-2">
-//               <h3 className="font-semibold text-gray-700">Question Paper</h3>
-//               <div className="flex items-center gap-2">
-//                 <button onClick={() => setZoomQP(z => Math.max(0.5, +(z - 0.1).toFixed(1)))} className="px-2 py-1 rounded-md border text-sm">-</button>
-//                 <div className="text-sm">{Math.round(zoomQP * 100)}%</div>
-//                 <button onClick={() => setZoomQP(z => Math.min(2, +(z + 0.1).toFixed(1)))} className="px-2 py-1 rounded-md border text-sm">+</button>
-//                 <button onClick={() => setZoomQP(1)} className="px-2 py-1 rounded-md border text-sm">Reset</button>
-//               </div>
-//             </div>
-
-//             <div className="border rounded-lg overflow-hidden bg-gray-100">
-//               <div style={{ transform: `scale(${zoomQP})`, transformOrigin: 'top left' }} className="p-6">
-//                 <div className="h-56 w-full bg-white rounded shadow-inner flex items-center justify-center text-gray-300">
-//                   <div className="text-center">
-//                     <div className="text-2xl font-semibold text-gray-400">Question Paper</div>
-//                     <div className="text-sm mt-2">(PDF/Image viewer placeholder)</div>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-
-//           <div className="bg-white rounded-2xl shadow-sm p-4 border">
-//             <div className="flex items-center justify-between mb-2">
-//               <h3 className="font-semibold text-gray-700">Student Answer Script</h3>
-//               <div className="flex items-center gap-2">
-//                 <button onClick={() => setZoomAS(z => Math.max(0.5, +(z - 0.1).toFixed(1)))} className="px-2 py-1 rounded-md border text-sm">-</button>
-//                 <div className="text-sm">{Math.round(zoomAS * 100)}%</div>
-//                 <button onClick={() => setZoomAS(z => Math.min(2, +(z + 0.1).toFixed(1)))} className="px-2 py-1 rounded-md border text-sm">+</button>
-//                 <button onClick={() => setZoomAS(1)} className="px-2 py-1 rounded-md border text-sm">Reset</button>
-//               </div>
-//             </div>
-
-//             <div className="border rounded-lg overflow-hidden bg-gray-100">
-//               <div style={{ transform: `scale(${zoomAS})`, transformOrigin: 'top left' }} className="p-6">
-//                 <div className="h-56 w-full bg-white rounded shadow-inner flex items-center justify-center text-gray-300">
-//                   <div className="text-center">
-//                     <div className="text-2xl font-semibold text-gray-400">Student Answer</div>
-//                     <div className="text-sm mt-2">(Scanned script placeholder)</div>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* marks entry */}
-//         <div className="mt-6 bg-white rounded-2xl p-6 border shadow-sm">
-//           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-//             <div>
-//               <div className="text-sm text-gray-500">Student ID: <span className="font-medium text-gray-800">{student.id}</span></div>
-//               <div className="text-sm text-gray-500">Student Name: <span className="font-medium text-gray-800">{student.name}</span></div>
-//               <div className="text-sm text-gray-500">Roll Number: <span className="font-medium text-gray-800">{student.roll}</span></div>
-//             </div>
-
-//             <div className="text-right">
-//               <div className="text-sm text-gray-500">Status</div>
-//               <div className={`inline-block px-3 py-1 rounded-full font-medium ${status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : status === 'In Progress' ? 'bg-sky-100 text-sky-800' : 'bg-green-100 text-green-800'}`}>
-//                 {status}
-//               </div>
-//             </div>
-
-//             <div className="ml-auto text-2xl font-extrabold text-red-600">Total Marks: {totalMarks} / 100</div>
-//           </div>
-
-//           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-//             {initialQuestions.map(q => (
-//               <div key={q.id} className="p-3 bg-gray-50 rounded-lg border">
-//                 <label className="text-sm text-gray-600 block mb-1">{q.label} <span className="text-xs text-gray-400">(max {q.max})</span></label>
-//                 <input
-//                   type="text"
-//                   inputMode="numeric"
-//                   value={marks[q.id]}
-//                   onChange={(e) => handleChange(q.id, e.target.value)}
-//                   className="w-full bg-white border rounded-md px-3 py-2 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-indigo-200"
-//                   placeholder="0"
-//                 />
-//               </div>
-//             ))}
-//           </div>
-
-//           <div className="mt-6 flex items-center justify-between">
-//             <div className="text-sm text-gray-400">Draft saved automatically</div>
-//             <div className="flex items-center gap-3">
-//               <button onClick={handleSaveDraft} className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">Save as Draft</button>
-//               <button onClick={handleSubmit} className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700">Submit Evaluation</button>
-//             </div>
-//           </div>
-//         </div>
-
-//       </div>
-//     </div>
-//   );
-// }
-
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { studentsData, evaluationDashboard } from "../../constants/constants";
-
-const initialQuestions = [
-  { id: "Q1", label: "Q1 Marks", max: 10 },
-  { id: "Q2a", label: "Q2a Marks", max: 5 },
-  { id: "Q2b", label: "Q2b Marks", max: 5 },
-  { id: "Q3", label: "Q3 Marks", max: 15 },
-  { id: "Q4", label: "Q4 Marks", max: 20 },
-  { id: "Q5", label: "Q5 Marks", max: 15 },
-  { id: "Q6a", label: "Q6a Marks", max: 15 },
-  { id: "Q6b", label: "Q6b Marks", max: 15 }
-];
-
-export default function StudentEvaluation() {
-  const { subjectId, studentId } = useParams();
+const StudentEvaluation = () => {
+  const { examId, studentId } = useParams();
   const navigate = useNavigate();
-  const sid = Number(subjectId);
-  const stid = Number(studentId);
+  const location = useLocation();
 
-  const students = studentsData[sid] || [];
-  const student = students.find(s => s.id === stid) || { id: stid, name: "Unknown", roll: "N/A", status: "Pending" };
-  const subject = evaluationDashboard.find(s => s.id === sid) || { subject: "Subject" };
+  const [activeTab, setActiveTab] = useState("questionPaper");
+  const [marks, setMarks] = useState({});
+  const [totalMarks, setTotalMarks] = useState(0);
+  const [comments, setComments] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [examData, setExamData] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const draftKey = `eval_draft_${sid}_${stid}`;
-  const [marks, setMarks] = useState(() => {
-    try {
-      const saved = localStorage.getItem(draftKey);
-      return saved ? JSON.parse(saved) : Object.fromEntries(initialQuestions.map(q => [q.id, ""]));
-    } catch {
-      return Object.fromEntries(initialQuestions.map(q => [q.id, ""]));
-    }
-  });
-
-  const [status, setStatus] = useState(student.status || "Pending");
-  const [zoomQP, setZoomQP] = useState(1);
-  const [zoomAS, setZoomAS] = useState(1);
-
+  // Load exam data on mount and when params change
   useEffect(() => {
-    const t = setTimeout(() => {
-      try { localStorage.setItem(draftKey, JSON.stringify(marks)); } catch {}
-    }, 300);
-    return () => clearTimeout(t);
-  }, [marks, draftKey]);
+    const loadData = () => {
+      const allExams = getAllExams();
+      setExamData(allExams);
+      setDataLoaded(true);
+    };
 
-  const handleChange = (qid, value) => {
-    if (value === "") {
-      setMarks(prev => ({ ...prev, [qid]: "" }));
+    // Load data immediately
+    loadData();
+
+    // Also load data after a delay to ensure any newly created exams are loaded
+    const timeoutId = setTimeout(() => {
+      const refreshedExams = getAllExams();
+      if (refreshedExams.length !== examData.length) {
+        setExamData(refreshedExams);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [examId, studentId]);
+
+  // Get exam data from navigation state if available, otherwise from loaded data
+  const examFromState = location.state?.examData;
+  const exam = examFromState || examData.find(e => e.id === examId);
+  const student = exam?.students?.find(s => s.studentId === studentId);
+
+  // If exam not found and data is loaded, try reloading data
+  useEffect(() => {
+    if (dataLoaded && !exam) {
+      console.log("Exam not found, reloading data...");
+      const refreshedData = getAllExams();
+      setExamData(refreshedData);
+
+      const refreshedExam = refreshedData.find(e => e.id === examId);
+      if (refreshedExam) {
+        console.log("Found exam after reload:", refreshedExam.id);
+      } else {
+        console.log("Still no exam found after reload");
+      }
+    }
+  }, [dataLoaded, exam, examId]);
+
+  // Loading state - show loading if no exam data available yet
+  if (!dataLoaded && !exam) {
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-blue-50 p-6 font-out">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading exam data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Exam not found - only show after data has loaded and no exam from state
+  if (dataLoaded && !exam) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-6 font-out">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Exam Not Found</h2>
+          <p className="text-gray-600">The requested exam could not be found.</p>
+          <button
+            onClick={() => navigate("/teacher")}
+            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Student not found
+  if (!student) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-6 font-out">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Student Not Found</h2>
+          <p className="text-gray-600">The requested student evaluation could not be found.</p>
+          <button
+            onClick={() => navigate(`/teacher/evaluation/${examId}`)}
+            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Back to Subject Evaluation
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Initialize marks for each question (assuming 10 questions for demo)
+  useEffect(() => {
+    if (exam && student) {
+      const initialMarks = {};
+      for (let i = 1; i <= 10; i++) {
+        initialMarks[`q${i}`] = marks[`q${i}`] || 0; // Preserve existing marks
+      }
+      setMarks(initialMarks);
+      calculateTotal();
+    }
+  }, [exam, student]);
+
+  const calculateTotal = () => {
+    const total = Object.values(marks).reduce((sum, mark) => sum + (parseFloat(mark) || 0), 0);
+    setTotalMarks(total);
+  };
+
+  const handleMarkChange = (question, value) => {
+    const newMarks = { ...marks, [question]: parseFloat(value) || 0 };
+    setMarks(newMarks);
+
+    // Recalculate total
+    const total = Object.values(newMarks).reduce((sum, mark) => sum + mark, 0);
+    setTotalMarks(total);
+  };
+
+  const handleSubmit = async () => {
+    if (totalMarks > 100) {
+      alert("Total marks cannot exceed 100!");
       return;
     }
-    const cleaned = value.replace(/[^0-9]/g, "");
-    setMarks(prev => ({ ...prev, [qid]: cleaned }));
-  };
 
-  const totalMarks = Object.entries(marks).reduce((acc, [k, v]) => acc + (Number(v || 0)), 0);
+    setLoading(true);
 
-  const handleSaveDraft = () => {
     try {
-      localStorage.setItem(draftKey, JSON.stringify(marks));
-      alert("Draft saved locally.");
-    } catch {
-      alert("Could not save draft.");
+      // Here you would typically send the evaluation data to your backend
+      // For demo purposes, we'll just show a success message
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+
+      // Update the student status to evaluated in EXAMDATA (in real app, this would be done via API)
+      const updatedExam = {
+        ...exam,
+        students: exam.students.map(s =>
+          s.studentId === studentId
+            ? { ...s, status: "evaluated", marks: totalMarks, evaluationDate: new Date().toISOString() }
+            : s
+        )
+      };
+
+      // In a real application, you would update this via API
+      console.log("Evaluation submitted:", {
+        examId,
+        studentId,
+        marks,
+        totalMarks,
+        comments
+      });
+
+      alert(`Evaluation submitted successfully!\nTotal Marks: ${totalMarks}/100`);
+
+      // Navigate back to subject evaluation
+      navigate(`/teacher/evaluation/${examId}`);
+
+    } catch (error) {
+      alert("Failed to submit evaluation. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSubmit = () => {
-    // basic validation and confirm if some empty
-    for (const q of initialQuestions) {
-      const v = marks[q.id];
-      if (v === "" || isNaN(Number(v))) {
-        if (!confirm(`Some marks are empty or invalid (question ${q.id}). Submit anyway?`)) return;
-        break;
-      }
-      if (Number(v) > q.max) {
-        if (!confirm(`${q.id} exceeds maximum marks (${q.max}). Submit anyway?`)) return;
-      }
-    }
-
-    try { localStorage.removeItem(draftKey); } catch {}
-    // In real app: call API to persist and update student's status
-    setStatus("Completed");
-    alert("Evaluation submitted. Total: " + totalMarks);
-
-    // Redirect back to teacher subject evaluation list
-    navigate(`/teacher/evaluation/${sid}`);
-  };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        <header className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-extrabold text-gray-800">Exam Evaluation Portal</h1>
-            <p className="text-sm text-gray-500">Subject: {subject.subject} — Student evaluation</p>
-          </div>
-        </header>
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-blue-50 p-6 font-out">
+      <div className="max-w-[1440px] mx-auto">
 
-        {/* viewers */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white rounded-2xl shadow-sm p-4 border">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-gray-700">Question Paper</h3>
-              <div className="flex items-center gap-2">
-                <button onClick={() => setZoomQP(z => Math.max(0.5, +(z - 0.1).toFixed(1)))} className="px-2 py-1 rounded-md border text-sm">-</button>
-                <div className="text-sm">{Math.round(zoomQP * 100)}%</div>
-                <button onClick={() => setZoomQP(z => Math.min(2, +(z + 0.1).toFixed(1)))} className="px-2 py-1 rounded-md border text-sm">+</button>
-                <button onClick={() => setZoomQP(1)} className="px-2 py-1 rounded-md border text-sm">Reset</button>
+        {/* Header */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate(`/teacher/evaluation/${examId}`)}
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <FaArrowLeft />
+                Back to Subject
+              </button>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">{exam.subject}</h1>
+                <p className="text-gray-600">{exam.title}</p>
               </div>
             </div>
-
-            <div className="border rounded-lg overflow-hidden bg-gray-100">
-              <div style={{ transform: `scale(${zoomQP})`, transformOrigin: 'top left' }} className="p-6">
-                <div className="h-56 w-full bg-white rounded shadow-inner flex items-center justify-center text-gray-300">
-                  <div className="text-center">
-                    <div className="text-2xl font-semibold text-gray-400">Question Paper</div>
-                    <div className="text-sm mt-2">(PDF/Image viewer placeholder)</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-sm p-4 border">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-gray-700">Student Answer Script</h3>
-              <div className="flex items-center gap-2">
-                <button onClick={() => setZoomAS(z => Math.max(0.5, +(z - 0.1).toFixed(1)))} className="px-2 py-1 rounded-md border text-sm">-</button>
-                <div className="text-sm">{Math.round(zoomAS * 100)}%</div>
-                <button onClick={() => setZoomAS(z => Math.min(2, +(z + 0.1).toFixed(1)))} className="px-2 py-1 rounded-md border text-sm">+</button>
-                <button onClick={() => setZoomAS(1)} className="px-2 py-1 rounded-md border text-sm">Reset</button>
-              </div>
-            </div>
-
-            <div className="border rounded-lg overflow-hidden bg-gray-100">
-              <div style={{ transform: `scale(${zoomAS})`, transformOrigin: 'top left' }} className="p-6">
-                <div className="h-56 w-full bg-white rounded shadow-inner flex items-center justify-center text-gray-300">
-                  <div className="text-center">
-                    <div className="text-2xl font-semibold text-gray-400">Student Answer</div>
-                    <div className="text-sm mt-2">(Scanned script placeholder)</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* marks entry */}
-        <div className="mt-6 bg-white rounded-2xl p-6 border shadow-sm">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div>
-              <div className="text-sm text-gray-500">Student ID: <span className="font-medium text-gray-800">{student.id}</span></div>
-              <div className="text-sm text-gray-500">Student Name: <span className="font-medium text-gray-800">{student.name}</span></div>
-              <div className="text-sm text-gray-500">Roll Number: <span className="font-medium text-gray-800">{student.roll}</span></div>
-            </div>
-
             <div className="text-right">
-              <div className="text-sm text-gray-500">Status</div>
-              <div className={`inline-block px-3 py-1 rounded-full font-medium ${status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : status === 'In Progress' ? 'bg-sky-100 text-sky-800' : 'bg-green-100 text-green-800'}`}>
-                {status}
-              </div>
-            </div>
-
-            <div className="ml-auto text-2xl font-extrabold text-red-600">Total Marks: {totalMarks} / 100</div>
-          </div>
-
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {initialQuestions.map(q => (
-              <div key={q.id} className="p-3 bg-gray-50 rounded-lg border">
-                <label className="text-sm text-gray-600 block mb-1">{q.label} <span className="text-xs text-gray-400">(max {q.max})</span></label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={marks[q.id]}
-                  onChange={(e) => handleChange(q.id, e.target.value)}
-                  className="w-full bg-white border rounded-md px-3 py-2 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                  placeholder="0"
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 flex items-center justify-between">
-            <div className="text-sm text-gray-400">Draft saved automatically</div>
-            <div className="flex items-center gap-3">
-              <button onClick={handleSaveDraft} className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">Save as Draft</button>
-              <button onClick={handleSubmit} className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700">Submit Evaluation</button>
+              <h3 className="text-lg font-semibold text-gray-900">{student.studentName}</h3>
+              <p className="text-gray-600">Roll: {student.rollNo}</p>
             </div>
           </div>
         </div>
 
+        <div className={`grid gap-6 ${isFullscreen ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
+
+          {/* Left Panel - Question Paper & Answer Key */}
+          {!isFullscreen && (
+            <div className="space-y-6">
+
+            {/* Tab Navigation */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+              <div className="flex border-b border-gray-200">
+                <button
+                  onClick={() => setActiveTab("questionPaper")}
+                  className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
+                    activeTab === "questionPaper"
+                      ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                  }`}
+                >
+                  <FaFileAlt className="inline mr-2" />
+                  Question Paper
+                </button>
+                <button
+                  onClick={() => setActiveTab("answerKey")}
+                  className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
+                    activeTab === "answerKey"
+                      ? "text-green-600 border-b-2 border-green-600 bg-green-50"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                  }`}
+                >
+                  <FaKey className="inline mr-2" />
+                  Answer Key
+                </button>
+              </div>
+
+              <div className="p-6">
+                {activeTab === "questionPaper" ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3 mb-4">
+                      <FaFileAlt className="text-blue-600 text-xl" />
+                      <h3 className="text-lg font-semibold text-gray-900">Question Paper</h3>
+                    </div>
+
+                    {/* Question Paper PDF Display */}
+                    <div className="bg-gray-50 p-2 rounded-lg border border-gray-300">
+                      <h4 className="font-semibold text-gray-900 mb-4">{exam.subject} - Question Paper</h4>
+
+                      <div className="w-full h-[500px] border border-gray-300 rounded-lg overflow-hidden">
+                        <iframe
+                          src={exam.questionPaper}
+                          className="w-full h-full"
+                          title={`${exam.subject} - Question Paper`}
+                          style={{ border: 'none' }}
+                        />
+                      </div>
+
+                      <div className="text-center text-gray-500 text-sm mt-4">
+                        Question Paper - {exam.subject}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3 mb-4">
+                      <FaKey className="text-green-600 text-xl" />
+                      <h3 className="text-lg font-semibold text-gray-900">Answer Key</h3>
+                    </div>
+
+                    {/* Answer Key PDF Display */}
+                    <div className="bg-green-50 p-6 rounded-lg border border-green-200">
+                      <h4 className="font-semibold text-gray-900 mb-4">Answer Key - {exam.subject}</h4>
+
+                      <div className="w-full h-[500px] border rounded-lg overflow-hidden">
+                        <iframe
+                          src={exam.answerKey}
+                          className="w-full h-full"
+                          title={`${exam.subject} - Answer Key`}
+                          style={{ border: 'none' }}
+                        />
+                      </div>
+
+                      <div className="text-center text-gray-500 text-sm mt-4">
+                        Answer Key - {exam.subject}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          )}
+
+          {/* Right Panel - Student Answer Sheet & Marking */}
+          <div className="space-y-6">
+
+            {/* Student Answer Sheet */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <FaEye className="text-purple-600 text-xl" />
+                    <h3 className="text-lg font-semibold text-gray-900">Student Answer Sheet</h3>
+                  </div>
+                  <button
+                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                    title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                  >
+                    {isFullscreen ? <FaCompress /> : <FaExpand />}
+                    <span className="text-sm font-medium">
+                      {isFullscreen ? "Minimize" : "Fullscreen"}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-6">
+                {/* Student Answer Sheet PDF Display */}
+                <div className="mb-6 mt-10">
+                  <h4 className="font-semibold text-gray-900 mb-4">Student Answer Sheet</h4>
+                  <div className="w-full h-[500px] border rounded-lg overflow-hidden">
+                    <iframe
+                      src={student.answerSheet}
+                      className="w-full h-full"
+                      title={`${student.studentName} - Answer Sheet`}
+                      style={{ border: 'none' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Question-wise Marking */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-gray-900">Question-wise Evaluation</h4>
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((q) => (
+                    <div key={q} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="font-medium text-gray-900">Question {q}</p>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            min="0"
+                            max="10"
+                            value={marks[`q${q}`] || 0}
+                            onChange={(e) => handleMarkChange(`q${q}`, e.target.value)}
+                            className="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm"
+                            placeholder="0"
+                          />
+                          <span className="text-sm text-gray-600">/10</span>
+                        </div>
+                      </div>
+
+                      <div className="text-sm text-gray-600">
+                        <p>Mark the student's answer for Question {q}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Marking Summary & Comments */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Evaluation Summary</h3>
+
+              <div className="space-y-4">
+                <div className="flex justify-between items-center py-3 px-4 bg-gray-50 rounded-lg">
+                  <span className="font-medium text-gray-900">Total Marks</span>
+                  <span className="text-xl font-bold text-blue-600">{totalMarks}/100</span>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Comments (Optional)
+                  </label>
+                  <textarea
+                    value={comments}
+                    onChange={(e) => setComments(e.target.value)}
+                    rows="3"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Add any comments about the student's performance..."
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-cyan-600 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    {loading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <FaSave />
+                        Submit Evaluation
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => navigate(`/teacher/evaluation/${examId}`)}
+                    className="px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
 
+export default StudentEvaluation;

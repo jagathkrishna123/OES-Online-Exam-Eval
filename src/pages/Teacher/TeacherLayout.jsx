@@ -1,13 +1,18 @@
 import React from 'react'
 // import { assets } from '../../assets/assets'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import TeacherSidebar from './TeacherSidebar'
 
 
 const TeacherLayout = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+
+    // Hide sidebar when on StudentEvaluation page
+    const hideSidebar = location.pathname.includes('/evaluation/')
 
     const logout = () => {
+        localStorage.removeItem('teacher')
         navigate('/')
     }
   return (
@@ -19,8 +24,10 @@ const TeacherLayout = () => {
             <button onClick={logout} className='text-sm px-8 py-2 bg-cyan-700 text-white rounded-full cursor-pointer'>Logout</button>
         </div>
         <div className='flex h-[calc(100vh-70px)]'>
-            <TeacherSidebar/>
+            {!hideSidebar && <TeacherSidebar/>}
+            <div className={`${hideSidebar ? 'w-full' : 'w-full overflow-y-auto'}`}>
             <Outlet/>
+            </div>
         </div>
     </>
   )

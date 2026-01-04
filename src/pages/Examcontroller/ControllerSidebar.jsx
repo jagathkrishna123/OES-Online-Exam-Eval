@@ -3,9 +3,9 @@
 
 import React from 'react'
 import { BiNotification } from 'react-icons/bi'
-import { CgAdd } from 'react-icons/cg'
+import { CgAdd, CgNotes } from 'react-icons/cg'
 import { GoReport } from 'react-icons/go'
-import { GrDashboard } from 'react-icons/gr'
+import { MdOutlineManageAccounts, MdOutlineSpaceDashboard } from 'react-icons/md'
 import { PiExam } from 'react-icons/pi'
 import { NavLink } from 'react-router-dom'
 // import { assets } from '../../assets/assets'
@@ -14,7 +14,7 @@ const ControllerSidebar = () => {
   return (
     <div className='flex flex-col border-r border-gray-200 min-h-full pt-6 text-gray-600'>
         <NavLink end={true} to='/controller' className={({isActive})=> `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-64 cursor-pointer ${isActive && "bg-cyan-800 text-white border-r-4 border-blue-800"}`}>
-            <GrDashboard/>
+            <MdOutlineSpaceDashboard/>
             <p className='hidden md:inline-block'>Dashboard</p>
         </NavLink>
 
@@ -24,7 +24,7 @@ const ControllerSidebar = () => {
         </NavLink>
 
         <NavLink  to='/controller/manage-teacher' className={({isActive})=> `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-64 cursor-pointer ${isActive && "bg-cyan-800 text-white border-r-4 border-blue-800"}`}>
-            <CgAdd/>
+            <MdOutlineManageAccounts/>
             <p className='hidden md:inline-block'>Manage Teacher</p>
         </NavLink>
 
@@ -38,7 +38,7 @@ const ControllerSidebar = () => {
             <p className='hidden md:inline-block'>Notifications</p>
         </NavLink>
         <NavLink  to='/controller/resultsmanage-' className={({isActive})=> `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-64 cursor-pointer ${isActive && "bg-cyan-800 text-white border-r-4 border-blue-800"}`}>
-            <BiNotification/>
+            <CgNotes/>
             <p className='hidden md:inline-block'>Manage Result</p>
         </NavLink>
         <NavLink  to='/controller/reports' className={({isActive})=> `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-64 cursor-pointer ${isActive && "bg-cyan-800 text-white border-r-4 border-blue-800"}`}>

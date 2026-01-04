@@ -12,6 +12,7 @@ const ControllerLayout = () => {
     const navigate = useNavigate()
 
     const logout = () => {
+        localStorage.removeItem('controller')
         navigate('/')
     }
   return (
@@ -24,7 +25,9 @@ const ControllerLayout = () => {
         </div>
         <div className='flex h-[calc(100vh-70px)]'>
             <ControllerSidebar/>
+            <div className='overflow-y-auto w-full'>
             <Outlet/>
+            </div>
         </div>
     </>
   )

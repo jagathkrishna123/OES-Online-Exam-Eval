@@ -1,374 +1,242 @@
-// // import React from "react";
-// // import { useParams } from "react-router-dom";
-// // import { evaluationDashboard, studentsData } from "../../constants/constants";
-
-// // const SubjectEvaluation = () => {
-// //   const { subjectId } = useParams();
-
-// //   // get the subject data using the id
-// //   const subject = evaluationDashboard.find(s => s.id === Number(subjectId));
-
-// //   // get students for this subject
-// //   const students = studentsData[subjectId] || [];
-
-// //   const completed = students.filter(s => s.status === "Completed").length;
-
-// //   return (
-// //     <div className="p-6">
-// //       <h1 className="text-2xl font-bold">
-// //         Evaluation: {subject.subject} - Final Exam
-// //       </h1>
-// //       <p className="text-gray-500 mb-6">
-// //         Select a student to begin the evaluation process.
-// //       </p>
-
-// //       {/* Top stats */}
-// //       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-// //         <div className="bg-white p-4 shadow rounded-lg border">
-// //           <p className="text-gray-600 text-sm">Total Students</p>
-// //           <p className="text-3xl font-bold">{students.length}</p>
-// //         </div>
-
-// //         <div className="bg-white p-4 shadow rounded-lg border">
-// //           <p className="text-gray-600 text-sm">Evaluations Completed</p>
-// //           <p className="text-3xl font-bold">{completed}</p>
-// //         </div>
-
-// //         <div className="bg-white p-4 shadow rounded-lg border">
-// //           <p className="text-gray-600 text-sm">Pending Evaluations</p>
-// //           <p className="text-3xl font-bold">{students.length - completed}</p>
-// //         </div>
-// //       </div>
-
-// //       {/* Student table */}
-// //       <div className="bg-white p-4 shadow rounded-lg border overflow-x-auto">
-// //         <table className="w-full text-sm">
-// //           <thead className="border-b">
-// //             <tr>
-// //               <th className="py-2 text-left">Student Name</th>
-// //               <th className="py-2 text-left">Roll Number</th>
-// //               <th className="py-2 text-left">Status</th>
-// //               <th className="py-2 text-left">Action</th>
-// //             </tr>
-// //           </thead>
-
-// //           <tbody>
-// //             {students.map((std) => (
-// //               <tr key={std.id} className="border-b">
-// //                 <td className="py-3">{std.name}</td>
-// //                 <td>{std.roll}</td>
-
-// //                 {/* Status badge */}
-// //                 <td>
-// //                   {std.status === "Pending" && (
-// //                     <span className="bg-yellow-100 text-yellow-600 px-2 py-1 rounded text-xs">
-// //                       Pending
-// //                     </span>
-// //                   )}
-// //                   {std.status === "Completed" && (
-// //                     <span className="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">
-// //                       Completed
-// //                     </span>
-// //                   )}
-// //                   {std.status === "In Progress" && (
-// //                     <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs">
-// //                       In Progress
-// //                     </span>
-// //                   )}
-// //                 </td>
-
-// //                 {/* Action button */}
-// //                 <td className="text-red-500 font-semibold cursor-pointer">
-// //                   {std.status === "Completed" ? "View" :
-// //                    std.status === "In Progress" ? "Continue" :
-// //                    "Evaluate"}
-// //                 </td>
-// //               </tr>
-// //             ))}
-// //           </tbody>
-// //         </table>
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // export default SubjectEvaluation;
-
-// //============================================================================================================================================
-// // import React from "react";
-// // import { useParams } from "react-router-dom";
-// // import { evaluationDashboard, studentsData } from "../../constants/constants";
-
-// // const SubjectEvaluation = () => {
-// //   const { subjectId } = useParams();
-
-// //   const subject = evaluationDashboard.find(s => s.id === Number(subjectId));
-
-// //   const students = studentsData[subjectId] || [];
-
-// //   const completed = students.filter(s => s.status === "Completed").length;
-
-// //   return (
-// //     <div className="min-h-screen bg-gray-100 p-6">
-// //       <div className="max-w-7xl mx-auto">
-
-// //         {/* Page Header */}
-// //         <h1 className="text-3xl font-bold text-gray-800 mb-2">
-// //           Evaluation: {subject.subject} – Final Exam
-// //         </h1>
-// //         <p className="text-gray-600 mb-8">
-// //           Select a student to begin the evaluation process.
-// //         </p>
-
-// //         {/* Top Stats */}
-// //         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-// //           <div className="bg-white rounded-xl shadow-sm border p-6">
-// //             <p className="text-gray-600 text-sm">Total Students</p>
-// //             <p className="text-4xl font-bold text-gray-800">{students.length}</p>
-// //           </div>
-
-// //           <div className="bg-white rounded-xl shadow-sm border p-6">
-// //             <p className="text-gray-600 text-sm">Evaluations Completed</p>
-// //             <p className="text-4xl font-bold text-gray-800">{completed}</p>
-// //           </div>
-
-// //           <div className="bg-white rounded-xl shadow-sm border p-6">
-// //             <p className="text-gray-600 text-sm">Pending Evaluations</p>
-// //             <p className="text-4xl font-bold text-gray-800">
-// //               {students.length - completed}
-// //             </p>
-// //           </div>
-// //         </div>
-
-// //         {/* Student Table */}
-// //         <div className="bg-white rounded-xl shadow-sm border p-6 overflow-x-auto">
-// //           <table className="w-full text-sm">
-// //             <thead>
-// //               <tr className="border-b bg-gray-50 text-gray-700">
-// //                 <th className="py-3 text-left font-medium">Student Name</th>
-// //                 <th className="py-3 text-left font-medium">Roll Number</th>
-// //                 <th className="py-3 text-left font-medium">Status</th>
-// //                 <th className="py-3 text-left font-medium">Action</th>
-// //               </tr>
-// //             </thead>
-
-// //             <tbody>
-// //               {students.map((std) => (
-// //                 <tr key={std.id} className="border-b hover:bg-gray-50">
-// //                   <td className="py-3">{std.name}</td>
-// //                   <td>{std.roll}</td>
-
-// //                   <td>
-// //                     {std.status === "Pending" && (
-// //                       <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs">
-// //                         Pending
-// //                       </span>
-// //                     )}
-// //                     {std.status === "Completed" && (
-// //                       <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">
-// //                         Completed
-// //                       </span>
-// //                     )}
-// //                     {std.status === "In Progress" && (
-// //                       <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs">
-// //                         In Progress
-// //                       </span>
-// //                     )}
-// //                   </td>
-
-// //                   <td className="text-blue-600 font-semibold cursor-pointer">
-// //                     {std.status === "Completed"
-// //                       ? "View"
-// //                       : std.status === "In Progress"
-// //                       ? "Continue"
-// //                       : "Evaluate"}
-// //                   </td>
-// //                 </tr>
-// //               ))}
-// //             </tbody>
-// //           </table>
-// //         </div>
-
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // export default SubjectEvaluation;
 
 
-// import React from "react";
-// import { useParams, Link } from "react-router-dom";
-// import { evaluationDashboard, studentsData } from "../constants/constants";
-
-// const SubjectEvaluation = () => {
-//   const { subjectId } = useParams();
-//   // fallback to first subject if param is undefined
-//   const sId = subjectId ?? String(evaluationDashboard[0].id);
-
-//   const subject = evaluationDashboard.find(s => s.id === Number(sId)) || evaluationDashboard[0];
-//   const students = studentsData[subject.id] || [];
-//   const completed = students.filter(s => s.status === "Completed").length;
-
-//   return (
-//     <div className="min-h-screen bg-gray-100 p-6">
-//       <div className="max-w-7xl mx-auto">
-//         <h1 className="text-3xl font-bold text-gray-800 mb-2">
-//           Evaluation: {subject.subject} – Final Exam
-//         </h1>
-//         <p className="text-gray-600 mb-8">Select a student to begin the evaluation process.</p>
-
-//         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-//           <div className="bg-white rounded-xl shadow-sm border p-6">
-//             <p className="text-gray-600 text-sm">Total Students</p>
-//             <p className="text-4xl font-bold text-gray-800">{students.length}</p>
-//           </div>
-
-//           <div className="bg-white rounded-xl shadow-sm border p-6">
-//             <p className="text-gray-600 text-sm">Evaluations Completed</p>
-//             <p className="text-4xl font-bold text-gray-800">{completed}</p>
-//           </div>
-
-//           <div className="bg-white rounded-xl shadow-sm border p-6">
-//             <p className="text-gray-600 text-sm">Pending Evaluations</p>
-//             <p className="text-4xl font-bold text-gray-800">{students.length - completed}</p>
-//           </div>
-//         </div>
-
-//         <div className="bg-white rounded-xl shadow-sm border p-6 overflow-x-auto">
-//           <table className="w-full text-sm">
-//             <thead>
-//               <tr className="border-b bg-gray-50 text-gray-700">
-//                 <th className="py-3 text-left font-medium">Student Name</th>
-//                 <th className="py-3 text-left font-medium">Roll Number</th>
-//                 <th className="py-3 text-left font-medium">Status</th>
-//                 <th className="py-3 text-left font-medium">Action</th>
-//               </tr>
-//             </thead>
-
-//             <tbody>
-//               {students.map((std) => (
-//                 <tr key={std.id} className="border-b hover:bg-gray-50">
-//                   <td className="py-3">{std.name}</td>
-//                   <td>{std.roll}</td>
-
-//                   <td>
-//                     {std.status === "Pending" && (
-//                       <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs">Pending</span>
-//                     )}
-//                     {std.status === "Completed" && (
-//                       <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">Completed</span>
-//                     )}
-//                     {std.status === "In Progress" && (
-//                       <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs">In Progress</span>
-//                     )}
-//                   </td>
-
-//                   <td>
-//                     {/* Link to evaluation page for that student */}
-//                     <Link
-//                       to={`/evaluate/${subject.id}/${std.id}`}
-//                       className="text-blue-600 font-semibold"
-//                     >
-//                       {std.status === "Completed" ? "View" : std.status === "In Progress" ? "Continue" : "Evaluate"}
-//                     </Link>
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
-
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SubjectEvaluation;
-
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { evaluationDashboard, studentsData } from "../../constants/constants";
+import { getAllExams } from "../../constants/constants";
+import { FaBook, FaUsers, FaCheckCircle, FaClock, FaEye, FaPlay, FaFileAlt } from "react-icons/fa";
 
 const SubjectEvaluation = () => {
   const { subjectId } = useParams();
-  // fallback to first subject if param is undefined
-  const sId = subjectId ?? String(evaluationDashboard[0].id);
+  const [examData, setExamData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const subject = evaluationDashboard.find(s => s.id === Number(sId)) || evaluationDashboard[0];
-  const students = studentsData[subject.id] || [];
-  const completed = students.filter(s => s.status === "Completed").length;
+  useEffect(() => {
+    const loadData = () => {
+      setExamData(getAllExams());
+      setLoading(false);
+    };
+
+    loadData();
+
+    // Reload data periodically to catch newly created exams
+    const interval = setInterval(() => {
+      const newData = getAllExams();
+      if (newData.length !== examData.length) {
+        setExamData(newData);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Find the exam by ID
+  const exam = examData.find(e => e.id === subjectId);
+  const students = exam?.students || [];
+  const completed = students.filter(s => s.status === "evaluated").length;
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-6 font-out">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading exam data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Exam not found
+  if (!exam) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-6 font-out">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Exam Not Found</h2>
+          <p className="text-gray-600 mb-6">The requested exam could not be found.</p>
+          <button
+            onClick={() => window.history.back()}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen max-w-7xl w-full mx-auto bg-gray-100 p-6">
-      <div className="">
-        <h1 className="text-3xl font-bold text-gray-600 mb-2">
-          Evaluation: {subject.subject} – Final Exam
-        </h1>
-        <p className="text-gray-400 mb-8 font-semibold">Select a student to begin the evaluation process.</p>
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-blue-50 p-6 font-out">
+      <div className="max-w-7xl mx-auto">
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-300 p-6 max-w-[230px]">
-            <p className="text-gray-500 text-sm font-bold">Total Students</p>
-            <p className="text-4xl font-bold text-gray-600">{students.length}</p>
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <FaBook className="text-blue-600" size={32} />
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                {exam.subject}
+              </h1>
+              <p className="text-gray-600">{exam.title}</p>
+            </div>
+          </div>
+          <p className="text-gray-600">
+            {exam.department} • {exam.year} • Created: {new Date(exam.createdAt).toLocaleDateString()}
+          </p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center gap-3 mb-3">
+              <FaUsers className="text-blue-600" size={20} />
+              <div>
+                <p className="text-gray-600 text-sm font-medium">Total Students</p>
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-gray-900">{students.length}</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-300 p-6 max-w-[230px]">
-            <p className="text-gray-500 text-sm font-bold">Evaluations Completed</p>
-            <p className="text-4xl font-bold text-gray-600">{completed}</p>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center gap-3 mb-3">
+              <FaCheckCircle className="text-green-600" size={20} />
+              <div>
+                <p className="text-gray-600 text-sm font-medium">Evaluations Completed</p>
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-green-600">{completed}</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-300 p-6 max-w-[230px]">
-            <p className="text-gray-500 text-sm font-bold">Pending Evaluations</p>
-            <p className="text-4xl font-bold text-gray-600">{students.length - completed}</p>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center gap-3 mb-3">
+              <FaClock className="text-orange-600" size={20} />
+              <div>
+                <p className="text-gray-600 text-sm font-medium">Pending Evaluations</p>
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-orange-600">{students.length - completed}</p>
           </div>
         </div>
 
-        <div className="bg-gray-200 rounded-xl shadow-sm border border-gray-300 p-6 overflow-x-auto max-w-7xl w-full">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-300 bg-gray-200 text-gray-700">
-                <th className="py-3 text-left font-medium">Student Name</th>
-                <th className="py-3 text-left font-medium">Roll Number</th>
-                <th className="py-3 text-left font-medium">Status</th>
-                <th className="py-3 text-left font-medium">Action</th>
-              </tr>
-            </thead>
+        {/* Students Table */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <FaFileAlt className="text-blue-600" />
+              Student Submissions
+            </h2>
+            <p className="text-gray-600 mt-1">Review and evaluate student answer sheets</p>
+          </div>
 
-            <tbody>
-              {students.map((std) => (
-                <tr key={std.id} className="border-b border-gray-300 hover:bg-gray-50">
-                  <td className="py-3">{std.name}</td>
-                  <td>{std.roll}</td>
-
-                  <td>
-                    {std.status === "Pending" && (
-                      <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs">Pending</span>
-                    )}
-                    {std.status === "Completed" && (
-                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">Completed</span>
-                    )}
-                    {std.status === "In Progress" && (
-                      <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs">In Progress</span>
-                    )}
-                  </td>
-
-                  <td>
-                    {/* Link to evaluation page for that student under /teacher */}
-                    <Link
-                      to={`/teacher/evaluation/${subject.id}/${std.id}`}
-                      className="text-blue-600 font-semibold"
-                    >
-                      {std.status === "Completed" ? "View" : std.status === "In Progress" ? "Continue" : "Evaluate"}
-                    </Link>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Student Name</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Roll Number</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Submission Date</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {students.map((student, index) => (
+                  <tr key={index} className="hover:bg-gray-50 transition-colors duration-200">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center">
+                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mr-3">
+                          <span className="text-white text-sm font-medium">
+                            {student.studentName.charAt(0)}
+                          </span>
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">
+                          {student.studentName}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <span className="text-sm text-gray-600 font-mono">{student.rollNo}</span>
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <span className="text-sm text-gray-600">
+                        {new Date(student.submittedAt).toLocaleDateString()}
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-4">
+                      {student.status === "pending" && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                          <FaClock className="mr-1" size={10} />
+                          Pending
+                        </span>
+                      )}
+                      {student.status === "evaluated" && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          <FaCheckCircle className="mr-1" size={10} />
+                          Evaluated
+                        </span>
+                      )}
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <Link
+                        to={`/teacher/evaluation/${exam.id}/${student.studentId}`}
+                        state={{ examData: exam }}
+                        className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                          student.status === "evaluated"
+                            ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            : "bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:from-blue-700 hover:to-cyan-600 shadow-md hover:shadow-lg"
+                        }`}
+                      >
+                        {student.status === "evaluated" ? (
+                          <>
+                            <FaEye className="mr-2" size={14} />
+                            View
+                          </>
+                        ) : (
+                          <>
+                            <FaPlay className="mr-2" size={14} />
+                            Evaluate
+                          </>
+                        )}
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {students.length === 0 && (
+            <div className="text-center py-12">
+              <FaUsers className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Students Found</h3>
+              <p className="text-gray-600">No students have submitted answer sheets for this exam yet.</p>
+            </div>
+          )}
         </div>
 
+        {/* Exam Files Section */}
+        <div className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Exam Files</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <FaFileAlt className="text-blue-600" size={20} />
+              <div>
+                <p className="font-medium text-gray-900">Question Paper</p>
+                <p className="text-sm text-gray-600">{exam.questionPaper}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg border border-green-200">
+              <FaBook className="text-green-600" size={20} />
+              <div>
+                <p className="font-medium text-gray-900">Answer Key</p>
+                <p className="text-sm text-gray-600">{exam.answerKey}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

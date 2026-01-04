@@ -1,134 +1,188 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
-  const [isTop, setIsTop] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsTop(window.scrollY < 50);
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleLogin = () => {
+    navigate("/login");
+  };
+
+  const scrollToSection = (sectionId) => {
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+    setOpen(false);
+  };
+
   return (
     <nav
       className={`
-        fixed top-0 left-0 w-full z-50 transition-all duration-300
-        backdrop-blur-md
-        ${isTop ? "bg-transparent border-b-0 text-white" : "bg-gray-800 text-gray-300"}
+        fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out
+        ${isScrolled
+          ? "bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-200 text-gray-800"
+          : "bg-transparent text-white"
+        }
       `}
     >
-      <div className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
 
-        {/* LEFT — LOGO */}
-        <p className="bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent text-3xl font-bold">
-          OES
-        </p>
-
-        {/* CENTER — Menu Links (Desktop Only) */}
-        <div className="hidden md:flex items-center gap-10 font-medium">
-          <a href="#" className="hover:text-blue-500 transition">Home</a>
-          <a href="#" className="hover:text-blue-500 transition">About</a>
-          <a href="#" className="hover:text-blue-500 transition">Contact</a>
-        </div>
-
-        {/* RIGHT — Search + Cart + Login (Desktop Only) */}
-        <div className="hidden md:flex items-center gap-6">
-
-          {/* Search */}
-          <div className="hidden lg:flex items-center gap-2 border border-gray-300 px-3 rounded-full bg-white/20">
-            <input
-              className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500 text-sm"
-              type="text"
-              placeholder="Search products"
-            />
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+          {/* LOGO */}
+          <div className="flex-shrink-0">
+            <button
+              onClick={() => navigate("/")}
+              className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 bg-clip-text text-transparent hover:from-blue-700 hover:via-cyan-600 hover:to-teal-500 transition-all duration-300"
             >
-              <path
-                d="M10.836 10.615 15 14.695"
-                stroke="#7A7B7D"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                clipRule="evenodd"
-                d="M9.141 11.738c2.729-1.136 4.001-4.224 2.841-6.898S7.67.921 4.942 2.057C2.211 3.193.94 6.281 2.1 8.955s4.312 3.92 7.041 2.783"
-                stroke="#7A7B7D"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-
-          {/* Cart */}
-          <div className="relative cursor-pointer">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 14 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M.583.583h2.333l1.564 7.81a1.17 1.17 0 0 0 1.166.94h5.67a1.17 1.17 0 0 0 1.167-.94l.933-4.893H3.5m2.333 8.75a.583.583 0 1 1-1.167 0 .583.583 0 0 1 1.167 0m6.417 0a.583.583 0 1 1-1.167 0 .583.583 0 0 1 1.167 0"
-                stroke="#615fff"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <button className="absolute -top-2 -right-3 text-xs text-white bg-indigo-500 w-[18px] h-[18px] rounded-full">
-              3
+              OES
             </button>
           </div>
 
-          {/* Login */}
-          <button className="cursor-pointer px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full">
-            Login
-          </button>
-        </div>
+          {/* DESKTOP NAVIGATION */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-8">
+              <button
+                onClick={() => scrollToSection("home")}
+                className={`px-3 py-2 text-sm font-medium transition-all duration-300 ${
+                  isScrolled
+                    ? "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    : "text-white hover:text-cyan-300 hover:bg-white/10"
+                } rounded-lg`}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => scrollToSection("features")}
+                className={`px-3 py-2 text-sm font-medium transition-all duration-300 ${
+                  isScrolled
+                    ? "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    : "text-white hover:text-cyan-300 hover:bg-white/10"
+                } rounded-lg`}
+              >
+                Features
+              </button>
+              <button
+                onClick={() => scrollToSection("about")}
+                className={`px-3 py-2 text-sm font-medium transition-all duration-300 ${
+                  isScrolled
+                    ? "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    : "text-white hover:text-cyan-300 hover:bg-white/10"
+                } rounded-lg`}
+              >
+                About
+              </button>
+              <button
+                onClick={() => scrollToSection("contact")}
+                className={`px-3 py-2 text-sm font-medium transition-all duration-300 ${
+                  isScrolled
+                    ? "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    : "text-white hover:text-cyan-300 hover:bg-white/10"
+                } rounded-lg`}
+              >
+                Contact
+              </button>
+            </div>
+          </div>
 
-        {/* MOBILE MENU BUTTON */}
-        <button
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
-          className="md:hidden"
-        >
-          <svg
-            width="21"
-            height="15"
-            viewBox="0 0 21 15"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="21" height="1.5" rx=".75" fill="#426287" />
-            <rect x="8" y="6" width="13" height="1.5" rx=".75" fill="#426287" />
-            <rect x="6" y="13" width="15" height="1.5" rx=".75" fill="#426287" />
-          </svg>
-        </button>
+          {/* LOGIN BUTTON */}
+          <div className="hidden md:block">
+            <button
+              onClick={handleLogin}
+              className="relative inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-full text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              <span>Login</span>
+              <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+
+          {/* MOBILE MENU BUTTON */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setOpen(!open)}
+              className={`inline-flex items-center justify-center p-2 rounded-md transition-all duration-300 ${
+                isScrolled ? "text-gray-700 hover:text-blue-600 hover:bg-blue-50" : "text-white hover:text-cyan-300 hover:bg-white/10"
+              }`}
+              aria-expanded="false"
+            >
+              <span className="sr-only">Open main menu</span>
+              {!open ? (
+                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              ) : (
+                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* MOBILE MENU */}
-      <div
-        className={`${
-          open ? "flex" : "hidden"
-        } md:hidden flex-col items-start gap-4 px-6 py-4 bg-white shadow-md text-black`}
-      >
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-        <button className="cursor-pointer px-6 py-2 mt-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full text-sm">
-          Login
-        </button>
+      <div className={`md:hidden transition-all duration-300 ease-in-out ${open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"}`}>
+        <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200 shadow-lg">
+          <button
+            onClick={() => scrollToSection("home")}
+            className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 w-full text-left rounded-lg transition-all duration-200"
+          >
+            Home
+          </button>
+          <button
+            onClick={() => scrollToSection("features")}
+            className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 w-full text-left rounded-lg transition-all duration-200"
+          >
+            Features
+          </button>
+          <button
+            onClick={() => scrollToSection("about")}
+            className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 w-full text-left rounded-lg transition-all duration-200"
+          >
+            About
+          </button>
+          <button
+            onClick={() => scrollToSection("contact")}
+            className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 w-full text-left rounded-lg transition-all duration-200"
+          >
+            Contact
+          </button>
+          <div className="pt-2">
+            <button
+              onClick={handleLogin}
+              className="w-full flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 transition-all duration-300"
+            >
+              Login
+              <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
   );

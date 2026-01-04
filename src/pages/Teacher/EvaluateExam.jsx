@@ -1,75 +1,168 @@
-import React from "react";
-import { evaluationDashboard } from "../../constants/constants";
+import React, { useState, useEffect } from "react";
+import { getAllExams } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
+import { FaBook, FaClock, FaCheckCircle, FaUsers, FaFileAlt } from "react-icons/fa";
 
 const EvaluateExam = () => {
   const navigate = useNavigate();
+  const [examData, setExamData] = useState([]);
+
+  useEffect(() => {
+    const loadData = () => {
+      setExamData(getAllExams());
+    };
+
+    loadData();
+
+    // Reload data periodically to catch newly created exams
+    const interval = setInterval(loadData, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-      {evaluationDashboard.map((item) => {
-        const percentage = Math.round(
-          (item.evaluatedPapers / item.totalPapers) * 100
-        );
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-blue-50 p-6 font-out">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+          <FaFileAlt className="text-blue-600" />
+          Evaluate Exams
+        </h1>
+        <p className="text-gray-600">
+          Review and evaluate student answer sheets for assigned examinations.
+        </p>
+      </div>
 
-        return (
-          <div
-            key={item.id}
-            className="bg-white shadow-md rounded-xl p-5 border border-gray-200"
-          >
-            {/* Subject + Department */}
-            <h2 className="text-xl font-semibold">{item.subject}</h2>
-            <p className="text-sm text-gray-600">{item.department}</p>
+      {/* Exams Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {examData.map((exam) => {
+          const totalStudents = exam.students.length;
+          const evaluatedStudents = exam.students.filter(s => s.status === "evaluated").length;
+          const pendingStudents = totalStudents - evaluatedStudents;
+          const percentage = totalStudents > 0 ? Math.round((evaluatedStudents / totalStudents) * 100) : 0;
 
-            {/* Due Badge */}
-            {item.status !== "completed" && (
-              <div className="inline-block bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full mt-2">
-                Due in {item.dueInDays} days
-              </div>
-            )}
-
-            {item.status === "completed" && (
-              <div className="inline-block bg-green-100 text-green-600 text-xs px-3 py-1 rounded-full mt-2">
-                Completed
-              </div>
-            )}
-
-            {/* Pending Papers */}
-            <p className="text-4xl font-bold mt-4">{item.pendingPapers}</p>
-            <p className="text-sm text-gray-500">Papers Pending</p>
-
-            {/* Progress Bar */}
-            <div className="mt-4">
-              <div className="flex justify-between text-xs text-gray-600 mb-1">
-                <span>Progress</span>
-                <span>
-                  {item.evaluatedPapers}/{item.totalPapers} Evaluated
-                </span>
-              </div>
-
-              <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className={`h-full ${
-                    item.status === "completed" ? "bg-green-500" : "bg-red-500"
-                  }`}
-                  style={{ width: `${percentage}%` }}
-                ></div>
-              </div>
-            </div>
-
-            {/* Action Button */}
-            <button
-              onClick={() => navigate(`/teacher/evaluation/${item.id}`)}
-              className={`w-full mt-5 py-2 rounded-lg text-white font-medium ${
-                item.status === "completed"
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-red-500 hover:bg-red-600"
-              }`}
+          return (
+            <div
+              key={exam.id}
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300"
             >
-              {item.action}
-            </button>
+              {/* Exam Header */}
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900 mb-1">{exam.title}</h2>
+                  <p className="text-sm text-gray-600">{exam.subject} - {exam.department}</p>
+                  <p className="text-xs text-gray-500 mt-1">{exam.year}</p>
+                </div>
+                <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  exam.status === "completed"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-blue-100 text-blue-700"
+                }`}>
+                  {exam.status === "completed" ? "Completed" : "Active"}
+                </div>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <FaUsers className="text-blue-500" size={14} />
+                    <span className="text-sm text-gray-600">Total</span>
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">{totalStudents}</p>
+                </div>
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <FaClock className="text-orange-500" size={14} />
+                    <span className="text-sm text-gray-600">Pending</span>
+                  </div>
+                  <p className="text-2xl font-bold text-orange-600">{pendingStudents}</p>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="mb-4">
+                <div className="flex justify-between text-xs text-gray-600 mb-2">
+                  <span>Evaluation Progress</span>
+                  <span>{evaluatedStudents}/{totalStudents} Completed</span>
+                </div>
+                <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full transition-all duration-300 ${
+                      percentage === 100 ? "bg-green-500" : "bg-blue-500"
+                    }`}
+                    style={{ width: `${percentage}%` }}
+                  ></div>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">{percentage}% Complete</p>
+              </div>
+
+              {/* Creation Date */}
+              <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
+                <FaClock size={12} />
+                <span>Created: {new Date(exam.createdAt).toLocaleDateString()}</span>
+              </div>
+
+              {/* Action Button */}
+              <button
+                onClick={() => {
+                  // Force reload of exam data before navigation
+                  const freshData = getAllExams();
+                  console.log("EvaluateExam - navigating to exam:", exam.id, "with fresh data:", freshData.length, "exams");
+                  navigate(`/teacher/evaluation/${exam.id}`);
+                }}
+                className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
+                  exam.status === "completed"
+                    ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+                    : "bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:from-blue-700 hover:to-cyan-600 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                }`}
+              >
+                {exam.status === "completed" ? (
+                  <>
+                    <FaCheckCircle />
+                    View Results
+                  </>
+                ) : (
+                  <>
+                    <FaBook />
+                    Evaluate Students
+                  </>
+                )}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Summary Stats */}
+      {examData.length > 0 && (
+        <div className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Evaluation Summary</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">{examData.length}</div>
+              <div className="text-sm text-gray-600">Total Exams</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">
+                {examData.filter(e => e.status === "active").length}
+              </div>
+              <div className="text-sm text-gray-600">Active Exams</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">
+                {examData.filter(e => e.status === "completed").length}
+              </div>
+              <div className="text-sm text-gray-600">Completed Exams</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-600">
+                {examData.reduce((total, exam) => total + exam.students.filter(s => s.status === "pending").length, 0)}
+              </div>
+              <div className="text-sm text-gray-600">Pending Evaluations</div>
+            </div>
           </div>
-        );
-      })}
+        </div>
+      )}
     </div>
   );
 };
