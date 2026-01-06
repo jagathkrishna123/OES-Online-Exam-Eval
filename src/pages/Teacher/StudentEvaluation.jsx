@@ -10,12 +10,15 @@ const StudentEvaluation = () => {
 
   const [activeTab, setActiveTab] = useState("questionPaper");
   const [marks, setMarks] = useState({});
+  const [outOfMarks, setOutOfMarks] = useState({});
   const [totalMarks, setTotalMarks] = useState(0);
+  const [totalPossibleMarks, setTotalPossibleMarks] = useState(0);
   const [comments, setComments] = useState("");
   const [loading, setLoading] = useState(false);
   const [examData, setExamData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [questionCount, setQuestionCount] = useState(10);
 
   // Load exam data on mount and when params change
   useEffect(() => {
@@ -108,35 +111,55 @@ const StudentEvaluation = () => {
     );
   }
 
-  // Initialize marks for each question (assuming 10 questions for demo)
+  // Initialize marks and out-of marks for each question based on questionCount
   useEffect(() => {
     if (exam && student) {
       const initialMarks = {};
-      for (let i = 1; i <= 10; i++) {
-        initialMarks[`q${i}`] = marks[`q${i}`] || 0; // Preserve existing marks
+      const initialOutOfMarks = {};
+      for (let i = 1; i <= questionCount; i++) {
+        initialMarks[`q${i}`] = 0; // Start with 0 marks
+        initialOutOfMarks[`q${i}`] = 10; // Default to 10 marks
       }
       setMarks(initialMarks);
+      setOutOfMarks(initialOutOfMarks);
       calculateTotal();
     }
-  }, [exam, student]);
+  }, [exam, student, questionCount]);
 
   const calculateTotal = () => {
-    const total = Object.values(marks).reduce((sum, mark) => sum + (parseFloat(mark) || 0), 0);
+    // Only calculate for current question count
+    let total = 0;
+    let totalPossible = 0;
+
+    for (let i = 1; i <= questionCount; i++) {
+      const questionKey = `q${i}`;
+      const markValue = parseFloat(marks[questionKey]) || 0;
+      const outOfValue = parseFloat(outOfMarks[questionKey]) || 0;
+
+      total += markValue;
+      totalPossible += outOfValue;
+    }
+
+    console.log(`Calculated totals: ${total}/${totalPossible} for ${questionCount} questions`);
     setTotalMarks(total);
+    setTotalPossibleMarks(totalPossible);
   };
 
   const handleMarkChange = (question, value) => {
     const newMarks = { ...marks, [question]: parseFloat(value) || 0 };
     setMarks(newMarks);
+    calculateTotal();
+  };
 
-    // Recalculate total
-    const total = Object.values(newMarks).reduce((sum, mark) => sum + mark, 0);
-    setTotalMarks(total);
+  const handleOutOfMarksChange = (question, value) => {
+    const newOutOfMarks = { ...outOfMarks, [question]: parseFloat(value) || 0 };
+    setOutOfMarks(newOutOfMarks);
+    calculateTotal();
   };
 
   const handleSubmit = async () => {
-    if (totalMarks > 100) {
-      alert("Total marks cannot exceed 100!");
+    if (totalMarks > totalPossibleMarks) {
+      alert(`Total marks cannot exceed ${totalPossibleMarks}!`);
       return;
     }
 
@@ -166,7 +189,7 @@ const StudentEvaluation = () => {
         comments
       });
 
-      alert(`Evaluation submitted successfully!\nTotal Marks: ${totalMarks}/100`);
+      alert(`Evaluation submitted successfully!\nTotal Marks: ${totalMarks}/${totalPossibleMarks}`);
 
       // Navigate back to subject evaluation
       navigate(`/teacher/evaluation/${examId}`);
@@ -189,19 +212,57 @@ const StudentEvaluation = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate(`/teacher/evaluation/${examId}`)}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 text-[13px] md:text-[16px] hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <FaArrowLeft />
                 Back to Subject
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">{exam.subject}</h1>
-                <p className="text-gray-600">{exam.title}</p>
+                <h1 className="text-[15px] sm:text-md md:text-3xl font-bold text-gray-900">{exam.subject}</h1>
+                <p className="text-gray-600 text-[13px] md:text-[16px]">{exam.title}</p>
               </div>
             </div>
             <div className="text-right">
-              <h3 className="text-lg font-semibold text-gray-900">{student.studentName}</h3>
-              <p className="text-gray-600">Roll: {student.rollNo}</p>
+              <h3 className="text-md md:text-lg font-semibold text-gray-900">{student.studentName}</h3>
+              <p className="text-gray-600 text-[13px] md:text-[15px]">Roll: {student.rollNo}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Question Count Selector */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">Evaluation Settings</h3>
+              <p className="text-sm text-gray-600">Set the number of questions to evaluate</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-gray-700">Number of Questions:</label>
+              <select
+                value={questionCount}
+                onChange={(e) => {
+                  const newCount = parseInt(e.target.value);
+                  setQuestionCount(newCount);
+
+                  // Clean up marks and out-of-marks to only include current questions
+                  const newMarks = {};
+                  const newOutOfMarks = {};
+                  for (let i = 1; i <= newCount; i++) {
+                    newMarks[`q${i}`] = marks[`q${i}`] || 0;
+                    newOutOfMarks[`q${i}`] = outOfMarks[`q${i}`] || 10;
+                  }
+                  setMarks(newMarks);
+                  setOutOfMarks(newOutOfMarks);
+
+                  // Calculate totals with the cleaned data
+                  calculateTotal();
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              >
+                {[5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map(num => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
@@ -337,7 +398,7 @@ const StudentEvaluation = () => {
                 {/* Question-wise Marking */}
                 <div className="space-y-4">
                   <h4 className="font-semibold text-gray-900">Question-wise Evaluation</h4>
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((q) => (
+                  {Array.from({ length: questionCount }, (_, i) => i + 1).map((q) => (
                     <div key={q} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <p className="font-medium text-gray-900">Question {q}</p>
@@ -345,13 +406,25 @@ const StudentEvaluation = () => {
                           <input
                             type="number"
                             min="0"
-                            max="10"
+                            max={outOfMarks[`q${q}`] || 10}
                             value={marks[`q${q}`] || 0}
                             onChange={(e) => handleMarkChange(`q${q}`, e.target.value)}
                             className="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm"
                             placeholder="0"
                           />
-                          <span className="text-sm text-gray-600">/10</span>
+                          <span className="text-sm text-gray-600">/</span>
+                          <select
+                            value={outOfMarks[`q${q}`] || 10}
+                            onChange={(e) => handleOutOfMarksChange(`q${q}`, e.target.value)}
+                            className="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm bg-white"
+                          >
+                            <option value={2}>2</option>
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={15}>15</option>
+                            <option value={20}>20</option>
+                            <option value={25}>25</option>
+                          </select>
                         </div>
                       </div>
 
@@ -371,7 +444,7 @@ const StudentEvaluation = () => {
               <div className="space-y-4">
                 <div className="flex justify-between items-center py-3 px-4 bg-gray-50 rounded-lg">
                   <span className="font-medium text-gray-900">Total Marks</span>
-                  <span className="text-xl font-bold text-blue-600">{totalMarks}/100</span>
+                  <span className="text-xl font-bold text-blue-600">{totalMarks}/{totalPossibleMarks}</span>
                 </div>
 
                 <div>

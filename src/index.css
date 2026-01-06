@@ -14,3 +14,7 @@
 .font-out{
   font-family: "Outfit", sans-serif;
 }
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
