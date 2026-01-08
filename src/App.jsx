@@ -21,11 +21,13 @@ import ManageResults from "./pages/Examcontroller/ManageResults";
 import ViewReportAndStatus from "./pages/Examcontroller/ViewReportAndStatus";
 import SubjectEvaluation from "./pages/Teacher/SubjectEvaluation";
 import StudentEvaluation from "./pages/Teacher/StudentEvaluation";
+import ScrollToTop from "./components/ScrollToTop";
 const App = () => {
   const { pathname } = useLocation();
   const hideLayout = pathname.includes("admin") || pathname.includes("teacher") || pathname.includes("controller");
   return (
     <div>
+      <ScrollToTop/>
       {!hideLayout && <Navbar />}
 
       <Routes>

@@ -6,6 +6,8 @@ const Login = () => {
   const [activeTab, setActiveTab] = useState("teacher-login");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState(""); // success, error, info
+  const [departments, setDepartments] = useState([]);
+  const [availableSubjects, setAvailableSubjects] = useState([]);
 
   // Teacher Login State
   const [teacherLogin, setTeacherLogin] = useState({
@@ -20,6 +22,7 @@ const Login = () => {
     password: "",
     confirmPassword: "",
     department: "",
+    subject: "",
     teacherId: "",
   });
 
@@ -85,6 +88,7 @@ const Login = () => {
         name: teacher.name,
         email: teacher.email,
         department: teacher.department,
+        subject: teacher.subject,
       }));
 
       showMessage("✅ Login successful! Redirecting...", "success");
@@ -102,7 +106,7 @@ const Login = () => {
 
     // Validation
     if (!teacherSignup.name || !teacherSignup.email || !teacherSignup.password ||
-        !teacherSignup.confirmPassword || !teacherSignup.department || !teacherSignup.teacherId) {
+        !teacherSignup.confirmPassword || !teacherSignup.department || !teacherSignup.subject || !teacherSignup.teacherId) {
       showMessage("❌ Please fill in all required fields.", "error");
       return;
     }
@@ -142,6 +146,8 @@ const Login = () => {
       email: teacherSignup.email,
       password: teacherSignup.password,
       department: teacherSignup.department,
+      subject: teacherSignup.subject,
+      status: "active", // Default status for new teachers
       createdAt: new Date().toISOString(),
     };
 
@@ -158,6 +164,7 @@ const Login = () => {
       password: "",
       confirmPassword: "",
       department: "",
+      subject: "",
       teacherId: "",
     });
     setActiveTab("teacher-login");
@@ -191,6 +198,30 @@ const Login = () => {
       showMessage("❌ Invalid admin credentials.", "error");
     }
   };
+
+  // Load departments from localStorage
+  useEffect(() => {
+    const savedDepartments = JSON.parse(localStorage.getItem("departments")) || [];
+    setDepartments(savedDepartments);
+  }, []);
+
+  // Update available subjects when department changes
+  useEffect(() => {
+    if (teacherSignup.department) {
+      const selectedDept = departments.find(dept => dept.name === teacherSignup.department);
+      if (selectedDept) {
+        // Collect all subjects from all years for the selected department
+        const allSubjects = Object.values(selectedDept.years).flat();
+        // Remove duplicates
+        const uniqueSubjects = [...new Set(allSubjects)];
+        setAvailableSubjects(uniqueSubjects);
+      } else {
+        setAvailableSubjects([]);
+      }
+    } else {
+      setAvailableSubjects([]);
+    }
+  }, [teacherSignup.department, departments]);
 
   // Check if already logged in
   useEffect(() => {
@@ -373,16 +404,55 @@ const Login = () => {
                 <label htmlFor="signup-department" className="block text-sm font-medium text-gray-700">
                   Department *
                 </label>
-                <input
+                <select
                   id="signup-department"
                   name="department"
-                  type="text"
                   required
                   value={teacherSignup.department}
                   onChange={handleTeacherSignupChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Computer Science"
-                />
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white"
+                >
+                  <option value="">Select Department</option>
+                  {departments.map((dept) => (
+                    <option key={dept.id} value={dept.name}>
+                      {dept.name}
+                    </option>
+                  ))}
+                </select>
+                {departments.length === 0 && (
+                  <p className="mt-1 text-xs text-orange-600">
+                    No departments available. Please contact the controller to create departments.
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="signup-subject" className="block text-sm font-medium text-gray-700">
+                  Subject *
+                </label>
+                <select
+                  id="signup-subject"
+                  name="subject"
+                  required
+                  value={teacherSignup.subject}
+                  onChange={handleTeacherSignupChange}
+                  disabled={!teacherSignup.department}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+                >
+                  <option value="">
+                    {teacherSignup.department ? "Select Subject" : "Select Department First"}
+                  </option>
+                  {availableSubjects.map((subject, index) => (
+                    <option key={index} value={subject}>
+                      {subject}
+                    </option>
+                  ))}
+                </select>
+                {teacherSignup.department && availableSubjects.length === 0 && (
+                  <p className="mt-1 text-xs text-orange-600">
+                    No subjects available for this department.
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">

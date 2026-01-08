@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEnvelope, FaSchool, FaCalendarAlt, FaBan, FaCheck, FaTrash, FaEdit } from "react-icons/fa";
-import { TEACHERSDATA } from "../../constants/constants";
 
 const ManageTeacher = () => {
   const [teachers, setTeachers] = useState([]);
@@ -22,9 +21,9 @@ const ManageTeacher = () => {
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(teacher =>
-        teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        teacher.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        teacher.department.toLowerCase().includes(searchTerm.toLowerCase())
+        teacher.name && teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        teacher.email && teacher.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        teacher.department && teacher.department.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -37,8 +36,9 @@ const ManageTeacher = () => {
   }, [teachers, searchTerm, statusFilter]);
 
   const loadTeachers = () => {
-    // Load from TEACHERSDATA (demo data)
-    setTeachers([...TEACHERSDATA]);
+    // Load only from localStorage (registered teachers)
+    const registeredTeachers = JSON.parse(localStorage.getItem("teachers")) || [];
+    setTeachers(registeredTeachers);
   };
 
   const showMessage = (text, type = "success") => {
@@ -52,7 +52,7 @@ const ManageTeacher = () => {
 
   const toggleTeacherStatus = (teacherId) => {
     const updatedTeachers = teachers.map(teacher => {
-      if (teacher.id === teacherId) {
+      if (teacher.id === teacherId || teacher.teacherId === teacherId) {
         const newStatus = teacher.status === "active" ? "blocked" : "active";
         return { ...teacher, status: newStatus };
       }
@@ -61,7 +61,20 @@ const ManageTeacher = () => {
 
     setTeachers(updatedTeachers);
 
-    const teacher = updatedTeachers.find(t => t.id === teacherId);
+    // Update status in localStorage for registered teachers
+    const registeredTeachers = JSON.parse(localStorage.getItem("teachers")) || [];
+    const updatedRegisteredTeachers = registeredTeachers.map(teacher => {
+      if (teacher.teacherId === teacherId) {
+        return { ...teacher, status: teacher.status === "active" ? "blocked" : "active" };
+      }
+      return teacher;
+    });
+    localStorage.setItem("teachers", JSON.stringify(updatedRegisteredTeachers));
+
+    // Reload teachers to refresh the UI
+    loadTeachers();
+
+    const teacher = updatedTeachers.find(t => t.id === teacherId || t.teacherId === teacherId);
     showMessage(
       `Teacher ${teacher.name} has been ${teacher.status === "active" ? "activated" : "blocked"}.`,
       teacher.status === "active" ? "success" : "warning"
@@ -70,10 +83,15 @@ const ManageTeacher = () => {
 
   const deleteTeacher = (teacherId) => {
     if (window.confirm("Are you sure you want to delete this teacher? This action cannot be undone.")) {
-      const updatedTeachers = teachers.filter(teacher => teacher.id !== teacherId);
-      setTeachers(updatedTeachers);
+      // Remove from localStorage first
+      const registeredTeachers = JSON.parse(localStorage.getItem("teachers")) || [];
+      const updatedRegisteredTeachers = registeredTeachers.filter(teacher => teacher.teacherId !== teacherId);
+      localStorage.setItem("teachers", JSON.stringify(updatedRegisteredTeachers));
 
-      const deletedTeacher = teachers.find(t => t.id === teacherId);
+      // Reload teachers to refresh the UI
+      loadTeachers();
+
+      const deletedTeacher = teachers.find(t => t.id === teacherId || t.teacherId === teacherId);
       showMessage(`Teacher ${deletedTeacher.name} has been deleted.`, "error");
     }
   };
@@ -170,7 +188,7 @@ const ManageTeacher = () => {
             const statusBadge = getStatusBadge(teacher.status);
             return (
               <div
-                key={teacher.id}
+                key={teacher.id || teacher.teacherId}
                 className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300"
               >
                 {/* Teacher Header */}
@@ -214,7 +232,7 @@ const ManageTeacher = () => {
                 {/* Action Buttons */}
                 <div className="flex gap-2">
                   <button
-                    onClick={() => toggleTeacherStatus(teacher.id)}
+                    onClick={() => toggleTeacherStatus(teacher.id || teacher.teacherId)}
                     className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                       teacher.status === "active"
                         ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
@@ -235,7 +253,7 @@ const ManageTeacher = () => {
                   </button>
 
                   <button
-                    onClick={() => deleteTeacher(teacher.id)}
+                    onClick={() => deleteTeacher(teacher.id || teacher.teacherId)}
                     className="px-4 py-2 bg-red-100 text-red-800 rounded-lg hover:bg-red-200 transition-all duration-300 font-medium"
                   >
                     <FaTrash size={14} />
